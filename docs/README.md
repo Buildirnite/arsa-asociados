@@ -63,6 +63,7 @@ Luego abrir `http://localhost` para el sitio y `http://localhost/admin` para el 
 | [seo.md](./seo.md) | Meta tags, Open Graph, JSON-LD, campos SEO por artículo |
 | [seguridad.md](./seguridad.md) | Modelo de autenticación, protecciones activas, checklist de despliegue |
 | [troubleshooting.md](./troubleshooting.md) | Bugs resueltos, decisiones técnicas |
+| [pendientes-y-auditoria.md](./pendientes-y-auditoria.md) | Contenido pendiente, pruebas de producción y auditoría de vulnerabilidades |
 
 ---
 
