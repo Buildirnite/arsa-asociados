@@ -302,4 +302,3 @@ Para el panel admin, usar ZAP en modo **Spider + Active Scan** con la cookie de 
 - [Mozilla Observatory](https://observatory.mozilla.org)
 - [Security Headers](https://securityheaders.com)
 - [docs/seguridad.md](./seguridad.md) — modelo de autenticación y protecciones activas del proyecto
-- [docs/deploy-railway.md](./deploy-railway.md) — variables de entorno de producción

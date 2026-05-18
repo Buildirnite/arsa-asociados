@@ -22,7 +22,7 @@
 
             <h2>1. Responsable del tratamiento</h2>
             <p>
-                <strong>Arsa & Asociados</strong>, representado por la abogada Nicool Catalyna Armas Salazar,
+                <strong>Arsa & Asociados</strong>, representado por la asesora jurídica Nicool Catalyna Armas Salazar,
                 con domicilio en Santiago de Chile, es responsable del tratamiento de los datos personales
                 que usted nos proporciona a través de este sitio web.
             </p>

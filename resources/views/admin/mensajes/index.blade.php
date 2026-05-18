@@ -10,7 +10,7 @@
 
     <header class="bg-midnight-950 px-6 py-4 flex items-center justify-between">
         <div class="flex items-center">
-            <img src="{{ asset('images/logo-icon.png') }}" alt="Arsa & Asociados" class="h-10 w-auto object-contain">
+            <img src="{{ asset('images/brand/logo-icon.png') }}" alt="Arsa & Asociados" class="h-10 w-auto object-contain">
         </div>
         <a href="{{ url('/') }}" class="text-xs text-midnight-400 hover:text-white transition-colors">← Ver sitio</a>
     </header>

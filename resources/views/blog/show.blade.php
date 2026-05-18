@@ -19,7 +19,7 @@
         "author": {
             "@@type": "Person",
             "name": "Nicool Armas",
-            "jobTitle": "Abogada",
+            "jobTitle": "Asesora Jurídica",
             "worksFor": {
                 "@@type": "Organization",
                 "name": "Arsa & Asociados"
@@ -51,7 +51,7 @@
                     {{ $post->title }}
                 </h1>
                 <div class="flex items-center gap-4 text-xs text-midnight-400">
-                    <span>Nicool Armas — Abogada</span>
+                    <span>Nicool Armas — Asesora Jurídica</span>
                     <span>·</span>
                     <span>{{ $post->published_at->format('d \d\e F \d\e Y') }}</span>
                     <span>·</span>

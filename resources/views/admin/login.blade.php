@@ -9,7 +9,7 @@
 <body class="min-h-screen bg-midnight-950 flex items-center justify-center px-4">
     <div class="w-full max-w-sm">
         <div class="flex justify-center mb-8">
-            <img src="{{ asset('images/logo-icon.png') }}" alt="Arsa & Asociados" class="h-20 w-auto object-contain">
+            <img src="{{ asset('images/brand/logo-icon.png') }}" alt="Arsa & Asociados" class="h-20 w-auto object-contain">
         </div>
 
         <form method="POST" class="bg-midnight-900 p-8 space-y-5">

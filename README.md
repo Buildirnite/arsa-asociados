@@ -5,7 +5,6 @@
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-005C84?style=flat&logo=mysql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
-![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=flat&logo=railway&logoColor=white)
 
 Sitio web institucional para el estudio jurídico **Arsa & Asociados**. Incluye homepage completa, blog con SEO profesional y un panel de administración para gestionar artículos y mensajes de contacto.
 
@@ -23,7 +22,7 @@ Un estudio jurídico necesita presencia digital profesional que transmita confia
 | Base de datos | MySQL 8.4 |
 | Caché / Sesiones | Redis |
 | Infraestructura | Docker · Laravel Sail |
-| Despliegue | Railway (Nixpacks) |
+| Despliegue | Por definir |
 
 ## Funcionalidades
 
@@ -77,7 +76,6 @@ arsa-asociados/
 │   ├── css/app.css                                # Paleta midnight + gold, fuentes
 │   └── js/editor.js                               # TipTap con toolbar + subida inline
 ├── routes/web.php
-├── railway.toml                                   # Despliegue automático
 └── docs/                                          # Documentación técnica completa
 ```
 
