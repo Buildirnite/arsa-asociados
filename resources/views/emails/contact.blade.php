@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="footer">
-            Este mensaje fue enviado desde el formulario de contacto de arsayasociados.cl
+            Este mensaje fue enviado desde el formulario de contacto de arsajuridico.cl
         </div>
     </div>
 </body>

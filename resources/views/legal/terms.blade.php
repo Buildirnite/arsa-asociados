@@ -22,7 +22,7 @@
 
             <h2>1. Aceptación de los términos</h2>
             <p>
-                Al acceder y utilizar este sitio web (<strong>arsayasociados.cl</strong>), usted acepta
+                Al acceder y utilizar este sitio web (<strong>arsajuridico.cl</strong>), usted acepta
                 quedar vinculado por los presentes Términos de Uso. Si no está de acuerdo con alguna parte
                 de estos términos, le pedimos que no utilice el sitio.
             </p>
@@ -63,7 +63,7 @@
             <h2>7. Contacto</h2>
             <p>
                 Para cualquier consulta sobre estos términos:
-                <a href="mailto:contacto@arsayasociados.cl">contacto@arsayasociados.cl</a>
+                <a href="mailto:catalynaarmas@gmail.com">catalynaarmas@gmail.com</a>
             </p>
 
         </div>

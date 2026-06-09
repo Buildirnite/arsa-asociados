@@ -4,6 +4,10 @@
 .env
 .env.backup
 .env.production
+
+# Documentación interna con credenciales del servidor — NUNCA subir
+Tutorial_Despliegue_Laravel_VPS.pdf
+*_Despliegue_*.pdf
 .phpactor.json
 .phpunit.result.cache
 /.fleet

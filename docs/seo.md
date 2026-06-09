@@ -83,7 +83,7 @@ Genera un sitemap XML con todos los artículos **publicados**, ordenados por `up
 
 Para registrarlo en Google Search Console usar la URL:
 ```
-https://arsayasociados.cl/sitemap.xml
+https://arsajuridico.cl/sitemap.xml
 ```
 
 ---
@@ -100,7 +100,7 @@ Presente en **todas** las páginas del sitio:
   "@type": "LegalService",
   "name": "Arsa & Asociados",
   "telephone": "+56930676693",
-  "email": "contacto@arsayasociados.cl",
+  "email": "catalynaarmas@gmail.com",
   "address": { "@type": "PostalAddress", "addressLocality": "Santiago", "addressCountry": "CL" },
   "openingHours": "Mo-Fr 09:00-18:00"
 }
@@ -116,7 +116,7 @@ Presente en **cada artículo** del blog:
   "@type": "BlogPosting",
   "headline": "Título del artículo",
   "description": "Meta description o excerpt",
-  "url": "https://arsayasociados.cl/blog/slug",
+  "url": "https://arsajuridico.cl/blog/slug",
   "datePublished": "2026-03-17T12:00:00+00:00",
   "dateModified": "2026-03-17T14:00:00+00:00",
   "author": {

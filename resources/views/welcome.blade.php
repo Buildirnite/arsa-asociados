@@ -17,7 +17,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2">
 
             {{-- Columna izquierda: fondo crema --}}
-            <div class="relative bg-[#F5F0E8] flex flex-col justify-center pl-20 pr-6 lg:pl-28 lg:pr-8 xl:pl-40 xl:pr-10 py-24 lg:py-32">
+            <div class="relative bg-[#F5F0E8] flex flex-col justify-center px-6 sm:px-8 lg:pl-28 lg:pr-8 xl:pl-40 xl:pr-10 py-24 lg:py-32">
                 <div class="flex items-center gap-3 mb-8 reveal">
                     <div class="h-px w-12 bg-gold-500"></div>
                     <span class="text-xs uppercase tracking-[0.3em] text-gold-700 font-medium">Asesoría Jurídica</span>
@@ -279,7 +279,7 @@
                         {{-- Foto: border dorado directo, marco recto --}}
                         <div class="aspect-[4/5] overflow-hidden"
                              style="border:2px solid rgba(201,168,76,0.55);">
-                            <img src="{{ asset('images/team/abogada.webp') }}" alt="Nicool Armas — Asesora Jurídica" class="w-full h-full object-cover object-top">
+                            <img src="{{ asset('images/team/abgd2.webp') }}" alt="Nicool Armas — Asesora Jurídica" class="w-full h-full object-cover object-top">
                         </div>
                         {{-- Badge con nombre --}}
                         <div class="bg-midnight-900 border-t border-gold-500/40 px-6 py-4">

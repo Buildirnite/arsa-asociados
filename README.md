@@ -151,7 +151,7 @@ ADMIN_PASSWORD=contraseña-robusta
 MAIL_HOST=smtp.ejemplo.com
 MAIL_USERNAME=correo@ejemplo.com
 MAIL_PASSWORD=contraseña
-MAIL_FROM_ADDRESS=noreply@arsayasociados.cl
+MAIL_FROM_ADDRESS=catalynaarmas@gmail.com
 ```
 
 Generar contraseña segura para el admin:

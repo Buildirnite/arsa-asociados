@@ -56,12 +56,12 @@ Antes de desplegar, el `.env` debe tener exactamente estos valores:
 ```env
 APP_ENV=production
 APP_DEBUG=false
-APP_URL=https://arsayasociados.cl
+APP_URL=https://arsajuridico.cl
 
 ADMIN_PASSWORD=<contraseña larga y aleatoria, mínimo 20 caracteres>
 
 SESSION_ENCRYPT=true
-SESSION_DOMAIN=arsayasociados.cl
+SESSION_DOMAIN=arsajuridico.cl
 SESSION_SECURE_COOKIE=true
 ```
 

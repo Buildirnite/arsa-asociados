@@ -25,14 +25,14 @@ Ejecutar esta checklist después de cada despliegue, antes de compartir la URL.
 
 ```bash
 # Confirmar que APP_DEBUG está desactivado
-curl -s https://arsayasociados.cl/ruta-que-no-existe | grep -i "debug\|trace\|exception"
+curl -s https://arsajuridico.cl/ruta-que-no-existe | grep -i "debug\|trace\|exception"
 # No debe devolver nada. Si devuelve un stack trace, APP_DEBUG está en true.
 
 # Verificar que el sitemap está accesible
-curl -s https://arsayasociados.cl/sitemap.xml | head -5
+curl -s https://arsajuridico.cl/sitemap.xml | head -5
 
 # Verificar robots.txt
-curl -s https://arsayasociados.cl/robots.txt
+curl -s https://arsajuridico.cl/robots.txt
 ```
 
 ### 2.2 Flujo del sitio público
@@ -85,7 +85,7 @@ Usar [validator.schema.org](https://validator.schema.org) y [developers.google.c
 
 ```bash
 # Verificar que los assets están comprimidos (Content-Encoding: gzip/br)
-curl -sI -H "Accept-Encoding: gzip, br" https://arsayasociados.cl | grep -i "content-encoding"
+curl -sI -H "Accept-Encoding: gzip, br" https://arsajuridico.cl | grep -i "content-encoding"
 
 # PageSpeed Insights desde CLI (requiere API key de Google)
 # O usar https://pagespeed.web.dev directamente
@@ -123,7 +123,7 @@ Probar en:
 ### 3.2 Headers HTTP de seguridad
 
 ```bash
-curl -sI https://arsayasociados.cl | grep -iE "x-frame|x-content|strict-transport|content-security|referrer"
+curl -sI https://arsajuridico.cl | grep -iE "x-frame|x-content|strict-transport|content-security|referrer"
 ```
 
 Headers que deben estar presentes en producción:
@@ -145,15 +145,15 @@ El proyecto usa Eloquent ORM, que previene SQL injection nativamente. Verificar 
 
 ```bash
 # Probar el parámetro de búsqueda del blog
-curl "https://arsayasociados.cl/blog?search=1' OR '1'='1"
-curl "https://arsayasociados.cl/blog?search=1; DROP TABLE posts--"
+curl "https://arsajuridico.cl/blog?search=1' OR '1'='1"
+curl "https://arsajuridico.cl/blog?search=1; DROP TABLE posts--"
 
 # El sitio debe devolver resultados vacíos o normales, nunca un error 500 con query SQL expuesto
 ```
 
 Con sqlmap (solo contra tu propio servidor):
 ```bash
-sqlmap -u "https://arsayasociados.cl/blog?search=test" --batch --level=2
+sqlmap -u "https://arsajuridico.cl/blog?search=test" --batch --level=2
 ```
 
 ---
@@ -162,11 +162,11 @@ sqlmap -u "https://arsayasociados.cl/blog?search=test" --batch --level=2
 
 ```bash
 # Intentar inyectar script en búsqueda del blog
-curl "https://arsayasociados.cl/blog?search=<script>alert(1)</script>"
+curl "https://arsajuridico.cl/blog?search=<script>alert(1)</script>"
 
 # El HTML devuelto debe mostrar el texto escapado, nunca ejecutar el script
 # Buscar en la respuesta: &lt;script&gt; (correcto) vs <script> (vulnerable)
-curl "https://arsayasociados.cl/blog?search=<script>alert(1)</script>" | grep -i "script"
+curl "https://arsajuridico.cl/blog?search=<script>alert(1)</script>" | grep -i "script"
 ```
 
 En el formulario de contacto, probar con nombre y mensaje:
@@ -184,7 +184,7 @@ Todos los formularios usan `@csrf`. Verificar que una petición sin token es rec
 
 ```bash
 # Enviar formulario de contacto sin token CSRF — debe devolver 419
-curl -X POST https://arsayasociados.cl/contacto \
+curl -X POST https://arsajuridico.cl/contacto \
   -d "name=test&email=test@test.com&message=hola" \
   -H "Content-Type: application/x-www-form-urlencoded"
 # Respuesta esperada: HTTP 419 Page Expired
@@ -198,7 +198,7 @@ curl -X POST https://arsayasociados.cl/contacto \
 ```bash
 # 6 intentos seguidos deben bloquear la IP por 60 segundos
 for i in {1..6}; do
-  curl -s -o /dev/null -w "%{http_code}\n" -X POST https://arsayasociados.cl/admin \
+  curl -s -o /dev/null -w "%{http_code}\n" -X POST https://arsajuridico.cl/admin \
     -d "password=incorrecta" \
     -H "Content-Type: application/x-www-form-urlencoded" \
     -c cookies.txt -b cookies.txt
@@ -210,14 +210,14 @@ done
 **Acceso directo sin sesión:**
 ```bash
 # Intentar acceder al panel sin autenticar
-curl -sI https://arsayasociados.cl/admin/posts
+curl -sI https://arsajuridico.cl/admin/posts
 # Debe redirigir a /admin (login), nunca mostrar contenido
 ```
 
 **Fijación de sesión:**
 ```bash
 # Verificar que la cookie de sesión cambia después del login
-curl -sI -X POST https://arsayasociados.cl/admin \
+curl -sI -X POST https://arsajuridico.cl/admin \
   -d "password=contraseña-correcta" \
   -c cookies_antes.txt
 # El Set-Cookie del login debe tener un ID de sesión diferente al de antes de autenticar
@@ -235,7 +235,7 @@ El admin puede subir imágenes. Verificar que solo acepta imágenes:
 echo '<?php system($_GET["cmd"]); ?>' > test.php
 
 # Subir con curl al endpoint de imágenes del admin (con cookie de sesión válida)
-curl -s -X POST https://arsayasociados.cl/admin/upload-image \
+curl -s -X POST https://arsajuridico.cl/admin/upload-image \
   -F "image=@test.php;type=image/jpeg" \
   -b "cookies válidas del admin"
 
@@ -248,18 +248,18 @@ curl -s -X POST https://arsayasociados.cl/admin/upload-image \
 
 ```bash
 # Verificar que no hay archivos sensibles accesibles
-curl -sI https://arsayasociados.cl/.env          # debe devolver 403 o 404
-curl -sI https://arsayasociados.cl/.git/config   # debe devolver 403 o 404
-curl -sI https://arsayasociados.cl/storage/logs/laravel.log  # debe devolver 403 o 404
+curl -sI https://arsajuridico.cl/.env          # debe devolver 403 o 404
+curl -sI https://arsajuridico.cl/.git/config   # debe devolver 403 o 404
+curl -sI https://arsajuridico.cl/storage/logs/laravel.log  # debe devolver 403 o 404
 
 # Verificar que phpinfo no está expuesto
-curl -s https://arsayasociados.cl/phpinfo.php | grep -i "phpinfo"
+curl -s https://arsajuridico.cl/phpinfo.php | grep -i "phpinfo"
 # No debe devolver nada
 ```
 
 Escaneo general con Nikto:
 ```bash
-nikto -h https://arsayasociados.cl
+nikto -h https://arsajuridico.cl
 ```
 
 ---

@@ -125,6 +125,6 @@ return [
 
     'admin_password' => env('ADMIN_PASSWORD', 'arsa2024'),
 
-    'mail_contact_address' => env('MAIL_CONTACT_ADDRESS', 'contacto@arsayasociados.cl'),
+    'mail_contact_address' => env('MAIL_CONTACT_ADDRESS', 'catalynaarmas@gmail.com'),
 
 ];

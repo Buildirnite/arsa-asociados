@@ -135,7 +135,7 @@ PATCH /admin/mensajes/{id}/leer    → ContactMessageAdminController@markRead
 
 ### `ContactController`
 
-Valida el formulario, guarda en `contact_messages` (primero), luego envía email a `contacto@arsayasociados.cl`. Si el email falla, el mensaje ya está guardado en BD.
+Valida el formulario, guarda en `contact_messages` (primero), luego envía email a `catalynaarmas@gmail.com`. Si el email falla, el mensaje ya está guardado en BD.
 
 ---
 

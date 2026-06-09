@@ -20,7 +20,7 @@ class ContactController extends Controller
         ContactMessage::create($validated);
 
         Mail::send([], [], function ($mail) use ($validated) {
-            $mail->to(config('app.mail_contact_address', 'contacto@arsayasociados.cl'))
+            $mail->to(config('app.mail_contact_address', 'catalynaarmas@gmail.com'))
                 ->replyTo($validated['email'], $validated['name'])
                 ->subject('Nueva consulta de ' . $validated['name'])
                 ->html(

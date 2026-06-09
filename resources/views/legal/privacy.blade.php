@@ -26,7 +26,7 @@
                 con domicilio en Santiago de Chile, es responsable del tratamiento de los datos personales
                 que usted nos proporciona a través de este sitio web.
             </p>
-            <p>Contacto: <a href="mailto:contacto@arsayasociados.cl">contacto@arsayasociados.cl</a></p>
+            <p>Contacto: <a href="mailto:catalynaarmas@gmail.com">catalynaarmas@gmail.com</a></p>
 
             <h2>2. Datos que recopilamos</h2>
             <p>A través del formulario de contacto recopilamos:</p>
@@ -70,7 +70,7 @@
             </ul>
             <p>
                 Para ejercer estos derechos, escríbanos a
-                <a href="mailto:contacto@arsayasociados.cl">contacto@arsayasociados.cl</a>.
+                <a href="mailto:catalynaarmas@gmail.com">catalynaarmas@gmail.com</a>.
             </p>
 
             <h2>7. Seguridad</h2>

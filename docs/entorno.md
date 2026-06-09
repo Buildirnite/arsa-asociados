@@ -55,7 +55,7 @@ DB_USERNAME=sail
 DB_PASSWORD=password
 
 MAIL_MAILER=smtp
-MAIL_FROM_ADDRESS=contacto@arsayasociados.cl
+MAIL_FROM_ADDRESS=catalynaarmas@gmail.com
 MAIL_FROM_NAME="Arsa & Asociados"
 ```
 

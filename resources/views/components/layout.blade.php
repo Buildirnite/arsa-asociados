@@ -44,7 +44,7 @@
         "description": "Asesoría jurídica especializada en derecho civil, laboral y de familia en Santiago de Chile.",
         "url": "{{ config('app.url') }}",
         "telephone": "+56930676693",
-        "email": "contacto@arsayasociados.cl",
+        "email": "catalynaarmas@gmail.com",
         "address": {
             "@@type": "PostalAddress",
             "addressLocality": "Santiago",
