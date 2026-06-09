@@ -523,6 +523,15 @@
 
                     <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
                         @csrf
+
+                        {{-- Anti-bots: campo trampa (honeypot). Invisible para humanos; los bots lo rellenan. --}}
+                        <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
+                            <label for="website">No rellenar este campo</label>
+                            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                        </div>
+                        {{-- Anti-bots: marca de tiempo de carga (time-trap) --}}
+                        <input type="hidden" name="form_loaded_at" value="{{ now()->timestamp }}">
+
                         <div>
                             <label for="name" class="block text-sm font-medium text-midnight-700 mb-2">Nombre completo</label>
                             <input type="text" id="name" name="name" required value="{{ old('name') }}"

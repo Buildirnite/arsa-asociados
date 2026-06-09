@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Support\ImageOptimizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,11 +14,27 @@ use Illuminate\View\View;
 
 class PostAdminController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $posts = Post::orderByDesc('created_at')->paginate(15);
+        $posts = Post::query()
+            ->when($request->filled('q'), fn ($q) => $q->where('title', 'like', '%' . $request->input('q') . '%'))
+            ->when($request->input('category'), fn ($q, $category) => $q->where('category', $category))
+            ->when($request->input('status'), function ($q, $status) {
+                match ($status) {
+                    'published' => $q->whereNotNull('published_at')->where('published_at', '<=', now()),
+                    'scheduled' => $q->where('published_at', '>', now()),
+                    'draft'     => $q->whereNull('published_at'),
+                    default     => null,
+                };
+            })
+            ->orderByDesc('created_at')
+            ->paginate(15)
+            ->withQueryString();
 
-        return view('admin.posts.index', compact('posts'));
+        return view('admin.posts.index', [
+            'posts'      => $posts,
+            'categories' => Post::CATEGORIES,
+        ]);
     }
 
     public function create(): View
@@ -37,7 +54,7 @@ class PostAdminController extends Controller
             : null;
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('posts', 'public');
+            $validated['image'] = ImageOptimizer::store($request->file('image'), 'posts');
         }
 
         Post::create($validated);
@@ -65,7 +82,7 @@ class PostAdminController extends Controller
             if ($post->image) {
                 Storage::disk('public')->delete($post->image);
             }
-            $validated['image'] = $request->file('image')->store('posts', 'public');
+            $validated['image'] = ImageOptimizer::store($request->file('image'), 'posts');
         }
 
         $post->update($validated);
@@ -78,6 +95,8 @@ class PostAdminController extends Controller
         if ($post->image) {
             Storage::disk('public')->delete($post->image);
         }
+
+        $this->deleteInlineImages($post->content);
 
         $post->delete();
 
@@ -97,7 +116,7 @@ class PostAdminController extends Controller
     public function uploadImage(Request $request): \Illuminate\Http\JsonResponse
     {
         $request->validate(['image' => ['required', 'image', 'mimes:jpeg,png,webp', 'max:2048']]);
-        $path = $request->file('image')->store('posts/inline', 'public');
+        $path = ImageOptimizer::store($request->file('image'), 'posts/inline');
 
         return response()->json(['url' => Storage::url($path)]);
     }
@@ -141,6 +160,23 @@ class PostAdminController extends Controller
     public function preview(Post $post): View
     {
         return view('blog.show', ['post' => $post, 'related' => collect()]);
+    }
+
+    /**
+     * Borra del disco las imágenes insertadas dentro del contenido del artículo
+     * (posts/inline/...), para no dejar archivos huérfanos al eliminar el post.
+     */
+    private function deleteInlineImages(?string $content): void
+    {
+        if (blank($content)) {
+            return;
+        }
+
+        preg_match_all('#/storage/(posts/inline/[^\s"\'?)]+)#', $content, $matches);
+
+        foreach (array_unique($matches[1] ?? []) as $path) {
+            Storage::disk('public')->delete($path);
+        }
     }
 
     private function uniqueSlug(string $base, ?int $ignoreId = null): string

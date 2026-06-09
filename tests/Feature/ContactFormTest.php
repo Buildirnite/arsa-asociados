@@ -60,4 +60,39 @@ class ContactFormTest extends TestCase
 
         $this->post('/contacto', $this->validPayload)->assertStatus(429);
     }
+
+    public function test_honeypot_blocks_bots_without_saving_or_sending(): void
+    {
+        Mail::fake();
+
+        $this->post('/contacto', array_merge($this->validPayload, [
+            'website' => 'http://spam.example',
+        ]))->assertRedirect();
+
+        $this->assertDatabaseCount('contact_messages', 0);
+        Mail::assertNothingSent();
+    }
+
+    public function test_time_trap_blocks_instant_submissions(): void
+    {
+        Mail::fake();
+
+        $this->post('/contacto', array_merge($this->validPayload, [
+            'form_loaded_at' => now()->timestamp,
+        ]))->assertRedirect();
+
+        $this->assertDatabaseCount('contact_messages', 0);
+        Mail::assertNothingSent();
+    }
+
+    public function test_legitimate_submission_with_elapsed_time_passes(): void
+    {
+        Mail::fake();
+
+        $this->post('/contacto', array_merge($this->validPayload, [
+            'form_loaded_at' => now()->subSeconds(10)->timestamp,
+        ]))->assertRedirect();
+
+        $this->assertDatabaseCount('contact_messages', 1);
+    }
 }

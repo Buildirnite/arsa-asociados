@@ -39,6 +39,15 @@
             @csrf
             @if($post->exists) @method('PUT') @endif
 
+            {{-- Banner de borrador autoguardado --}}
+            <div id="draft-banner" class="hidden items-center justify-between gap-3 bg-amber-50 border border-amber-200 px-4 py-3 text-sm">
+                <span class="text-amber-800">Hay un borrador sin guardar de este artículo.</span>
+                <span class="flex gap-3 shrink-0">
+                    <button type="button" id="draft-restore" class="font-semibold text-amber-800 hover:underline">Restaurar</button>
+                    <button type="button" id="draft-discard" class="text-amber-600 hover:underline">Descartar</button>
+                </span>
+            </div>
+
             <div>
                 <label class="block text-sm font-medium text-midnight-700 mb-2">Título</label>
                 <input type="text" name="title" required value="{{ old('title', $post->title) }}"
@@ -49,7 +58,7 @@
                 <label class="block text-sm font-medium text-midnight-700 mb-2">Categoría</label>
                 <select name="category"
                         class="w-full px-4 py-3 border border-midnight-200 text-sm text-midnight-900 bg-white focus:outline-none focus:border-gold-500 transition-colors">
-                    @foreach(['Derecho Civil', 'Derecho Laboral', 'Derecho de Familia', 'Derecho Inmobiliario', 'Cobranza Judicial', 'Derecho Penal', 'General'] as $cat)
+                    @foreach(\App\Models\Post::CATEGORIES as $cat)
                         <option value="{{ $cat }}" {{ old('category', $post->category) === $cat ? 'selected' : '' }}>
                             {{ $cat }}
                         </option>
@@ -58,10 +67,11 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-midnight-700 mb-2">
-                    Resumen <span class="text-midnight-400 font-normal">(máx. 300 caracteres — aparece en la lista)</span>
+                <label class="flex items-center justify-between text-sm font-medium text-midnight-700 mb-2">
+                    <span>Resumen <span class="text-midnight-400 font-normal" id="excerpt-counter">(máx. 300 — aparece en la lista)</span></span>
+                    <button type="button" id="gen-excerpt" class="text-xs text-gold-600 hover:text-gold-700 font-medium">↳ Generar desde el contenido</button>
                 </label>
-                <textarea name="excerpt" rows="3" required maxlength="300"
+                <textarea name="excerpt" id="excerpt-input" rows="3" required maxlength="300"
                           class="w-full px-4 py-3 border border-midnight-200 text-sm text-midnight-900 focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition-colors resize-none">{{ old('excerpt', $post->excerpt) }}</textarea>
             </div>
 
@@ -120,6 +130,10 @@
                 {{-- Área de edición --}}
                 <div id="editor" class="border border-midnight-200 bg-white cursor-text"></div>
                 <input type="hidden" name="content" id="content-input" value="{{ old('content', $post->content) }}">
+                <div class="flex items-center justify-between mt-1.5">
+                    <p class="text-xs text-midnight-400" id="content-stats">0 palabras · 1 min de lectura</p>
+                    <p class="text-xs text-midnight-300">Puedes arrastrar o pegar imágenes aquí</p>
+                </div>
                 @error('content')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
             </div>
 
@@ -152,6 +166,14 @@
             <div class="border-t border-midnight-100 pt-6 space-y-4">
                 <p class="text-xs uppercase tracking-[0.2em] text-gold-600 font-semibold">SEO</p>
 
+                {{-- Vista previa de cómo se verá en Google --}}
+                <div class="border border-midnight-200 rounded p-4 bg-white">
+                    <p class="text-[11px] uppercase tracking-wider text-midnight-400 mb-2">Vista previa en Google</p>
+                    <p id="seo-preview-url" class="text-xs text-green-700 truncate">arsajuridico.cl › blog › mi-articulo</p>
+                    <p id="seo-preview-title" class="text-[#1a0dab] text-lg leading-snug truncate">Título del artículo</p>
+                    <p id="seo-preview-desc" class="text-sm text-midnight-500 leading-snug">Descripción del artículo…</p>
+                </div>
+
                 <div>
                     <label class="block text-sm font-medium text-midnight-700 mb-1">
                         Slug (URL)
@@ -179,9 +201,9 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-midnight-700 mb-1">
-                        Meta descripción
-                        <span class="text-midnight-400 font-normal" id="meta-desc-counter">(máx. 160 caracteres)</span>
+                    <label class="flex items-center justify-between text-sm font-medium text-midnight-700 mb-1">
+                        <span>Meta descripción <span class="text-midnight-400 font-normal" id="meta-desc-counter">(máx. 160)</span></span>
+                        <button type="button" id="gen-meta-desc" class="text-xs text-gold-600 hover:text-gold-700 font-medium">↳ Generar desde el resumen</button>
                     </label>
                     <textarea name="meta_description" id="meta-desc-input" rows="3" maxlength="160"
                               placeholder="Si está vacía se usará el resumen del artículo"
@@ -190,14 +212,23 @@
                 </div>
             </div>
 
+            @php
+                $pubInitial = old('publish_at', $post->published_at?->format('Y-m-d\TH:i'));
+                $pubState   = ! $pubInitial ? 'draft' : (\Carbon\Carbon::parse($pubInitial)->isFuture() ? 'schedule' : 'now');
+            @endphp
             <div class="pt-2">
-                <label class="block text-sm font-medium text-midnight-700 mb-2">
-                    Fecha de publicación
-                    <span class="text-midnight-400 font-normal">— vacío = borrador · fecha futura = programado · fecha pasada = publicar</span>
-                </label>
-                <input type="datetime-local" name="publish_at"
-                       value="{{ old('publish_at', $post->published_at?->format('Y-m-d\TH:i')) }}"
-                       class="px-4 py-3 border border-midnight-200 text-sm text-midnight-900 focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition-colors">
+                <label class="block text-sm font-medium text-midnight-700 mb-2">Publicación</label>
+                <div class="inline-flex border border-midnight-200 rounded overflow-hidden" id="pub-options" data-initial="{{ $pubState }}">
+                    <button type="button" data-pub="draft"    class="pub-btn px-4 py-2.5 text-sm border-r border-midnight-200 transition-colors">Borrador</button>
+                    <button type="button" data-pub="now"      class="pub-btn px-4 py-2.5 text-sm border-r border-midnight-200 transition-colors">Publicar ahora</button>
+                    <button type="button" data-pub="schedule" class="pub-btn px-4 py-2.5 text-sm transition-colors">Programar</button>
+                </div>
+                <div id="pub-schedule" class="mt-3 hidden">
+                    <input type="datetime-local" id="publish-at-picker" value="{{ $pubState === 'schedule' ? $pubInitial : '' }}"
+                           class="px-4 py-3 border border-midnight-200 text-sm text-midnight-900 focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition-colors">
+                    <p class="mt-1 text-xs text-midnight-400">El artículo se publicará automáticamente en esta fecha y hora.</p>
+                </div>
+                <input type="hidden" name="publish_at" id="publish-at" value="{{ $pubInitial }}">
             </div>
 
             <div class="flex items-center gap-4 pt-2 border-t border-midnight-100">
@@ -220,54 +251,190 @@
 
 <script>
 (function () {
-    // --- Slug auto-generation (only for new posts) ---
-    const titleInput = document.querySelector('input[name="title"]');
-    const slugInput  = document.getElementById('slug-input');
-    const isNew      = {{ $post->exists ? 'false' : 'true' }};
-    let slugEdited   = slugInput.value.length > 0 && !isNew;
+    const form     = document.querySelector('form');
+    const isNew    = {{ $post->exists ? 'false' : 'true' }};
+    const draftKey = 'arsa_post_draft_{{ $post->exists ? $post->id : "new" }}';
+    let formDirty  = false;
 
+    const titleInput     = document.querySelector('input[name="title"]');
+    const slugInput      = document.getElementById('slug-input');
+    const contentInput   = document.getElementById('content-input');
+    const excerptInput   = document.getElementById('excerpt-input');
+    const metaTitleInput = document.getElementById('meta-title-input');
+    const metaDescInput  = document.getElementById('meta-desc-input');
+    const host           = '{{ parse_url(config('app.url'), PHP_URL_HOST) ?: 'arsajuridico.cl' }}';
+
+    // ---------- Slug ----------
+    let slugEdited = slugInput.value.length > 0 && !isNew;
     function toSlug(str) {
-        return str
-            .toLowerCase()
+        return str.toLowerCase()
             .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-z0-9\s-]/g, '')
-            .trim()
-            .replace(/[\s_]+/g, '-')
-            .replace(/-+/g, '-');
+            .replace(/[^a-z0-9\s-]/g, '').trim()
+            .replace(/[\s_]+/g, '-').replace(/-+/g, '-');
     }
-
     if (isNew) {
-        titleInput.addEventListener('input', function () {
-            if (!slugEdited) slugInput.value = toSlug(this.value);
-        });
-        slugInput.addEventListener('input', function () {
-            slugEdited = this.value.length > 0;
-        });
-        slugInput.addEventListener('blur', function () {
-            this.value = toSlug(this.value);
-        });
-    } else {
-        slugInput.addEventListener('blur', function () {
-            this.value = toSlug(this.value);
-        });
+        titleInput.addEventListener('input', () => { if (!slugEdited) slugInput.value = toSlug(titleInput.value); });
+        slugInput.addEventListener('input', () => { slugEdited = slugInput.value.length > 0; });
+    }
+    slugInput.addEventListener('blur', () => { slugInput.value = toSlug(slugInput.value); updatePreview(); });
+
+    // ---------- Texto plano del editor ----------
+    function plainText() {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = contentInput.value || '';
+        return (tmp.textContent || '').replace(/\s+/g, ' ').trim();
     }
 
-    // --- Character counters ---
-    function counter(inputId, labelId, max) {
-        const input = document.getElementById(inputId);
-        const label = document.getElementById(labelId);
+    // ---------- Palabras + tiempo de lectura ----------
+    const stats = document.getElementById('content-stats');
+    function updateStats() {
+        const text  = plainText();
+        const words = text ? text.split(' ').length : 0;
+        const mins  = Math.max(1, Math.ceil(words / 200));
+        stats.textContent = `${words} palabra${words === 1 ? '' : 's'} \u00b7 ${mins} min de lectura`;
+    }
+
+    // ---------- Vista previa de Google ----------
+    const pvTitle = document.getElementById('seo-preview-title');
+    const pvUrl   = document.getElementById('seo-preview-url');
+    const pvDesc  = document.getElementById('seo-preview-desc');
+    function updatePreview() {
+        pvTitle.textContent = (metaTitleInput.value || titleInput.value || 'T\u00edtulo del art\u00edculo').trim();
+        pvDesc.textContent  = (metaDescInput.value || excerptInput.value || 'Descripci\u00f3n del art\u00edculo\u2026').trim();
+        pvUrl.textContent   = `${host} \u203a blog \u203a ${slugInput.value || 'mi-articulo'}`;
+    }
+
+    // ---------- Sem\u00e1foro de longitud (verde = \u00f3ptimo, \u00e1mbar = mejorable) ----------
+    function gauge(input, label, okMin, okMax, hardMax) {
         if (!input || !label) return;
         function update() {
-            const remaining = max - input.value.length;
-            label.textContent = `(${input.value.length}/${max} caracteres)`;
-            label.classList.toggle('text-red-500', remaining < 10);
+            const len = input.value.length;
+            label.textContent = `${len}/${hardMax}`;
+            label.classList.remove('text-green-600', 'text-amber-500');
+            if (len >= okMin && len <= okMax) label.classList.add('text-green-600');
+            else if (len > 0)                 label.classList.add('text-amber-500');
         }
         input.addEventListener('input', update);
         update();
     }
+    gauge(metaTitleInput, document.getElementById('meta-title-counter'), 50, 60, 70);
+    gauge(metaDescInput,  document.getElementById('meta-desc-counter'), 120, 160, 160);
+    gauge(excerptInput,   document.getElementById('excerpt-counter'),   80, 300, 300);
 
-    counter('meta-title-input', 'meta-title-counter', 70);
-    counter('meta-desc-input',  'meta-desc-counter',  160);
+    [titleInput, metaTitleInput, metaDescInput, excerptInput].forEach(el => el && el.addEventListener('input', updatePreview));
+    contentInput.addEventListener('input', updateStats);
+
+    // ---------- Generar resumen / meta descripci\u00f3n ----------
+    function summarize(text, max) {
+        if (text.length <= max) return text;
+        const cut = text.slice(0, max);
+        return cut.slice(0, cut.lastIndexOf(' ')).trim() + '\u2026';
+    }
+    document.getElementById('gen-excerpt')?.addEventListener('click', () => {
+        const text = plainText();
+        if (!text) return alert('Escribe primero el contenido del art\u00edculo.');
+        excerptInput.value = summarize(text, 300);
+        excerptInput.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    document.getElementById('gen-meta-desc')?.addEventListener('click', () => {
+        const base = excerptInput.value.trim() || plainText();
+        if (!base) return alert('Escribe primero el resumen o el contenido.');
+        metaDescInput.value = summarize(base, 160);
+        metaDescInput.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    // ---------- Autoguardado en localStorage ----------
+    const fields = ['title', 'category', 'excerpt', 'content', 'meta_title', 'meta_description', 'slug', 'publish_at'];
+    let saveTimer;
+    form.addEventListener('input', () => {
+        formDirty = true;
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+            const data = { _ts: Date.now() };
+            fields.forEach(name => {
+                const el = form.querySelector(`[name="${name}"]`);
+                if (el) data[name] = el.value;
+            });
+            try { localStorage.setItem(draftKey, JSON.stringify(data)); } catch {}
+        }, 1000);
+    });
+
+    // ---------- Restaurar borrador ----------
+    const banner = document.getElementById('draft-banner');
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(draftKey)); } catch {}
+    if (saved && saved.title !== undefined) {
+        banner.classList.remove('hidden');
+        banner.classList.add('flex');
+        document.getElementById('draft-restore').addEventListener('click', () => {
+            fields.forEach(name => {
+                if (saved[name] === undefined) return;
+                const el = form.querySelector(`[name="${name}"]`);
+                if (el) el.value = saved[name];
+            });
+            window.dispatchEvent(new CustomEvent('restore-editor', { detail: saved.content || '' }));
+            updateStats(); updatePreview();
+            banner.classList.add('hidden');
+        });
+        document.getElementById('draft-discard').addEventListener('click', () => {
+            localStorage.removeItem(draftKey);
+            banner.classList.add('hidden');
+        });
+    }
+
+    // ---------- Aviso de cambios sin guardar ----------
+    window.addEventListener('beforeunload', (e) => {
+        if (formDirty) { e.preventDefault(); e.returnValue = ''; }
+    });
+    form.addEventListener('submit', () => {
+        formDirty = false;
+        localStorage.removeItem(draftKey);
+    });
+
+    // ---------- Estado de publicación (Borrador / Publicar ahora / Programar) ----------
+    const pubWrap   = document.getElementById('pub-options');
+    const pubBtns   = pubWrap.querySelectorAll('.pub-btn');
+    const pubSched  = document.getElementById('pub-schedule');
+    const pubPicker = document.getElementById('publish-at-picker');
+    const pubHidden = document.getElementById('publish-at');
+
+    function dtLocal(d) {
+        const p = n => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+    }
+    function paintPub(state) {
+        pubBtns.forEach(b => {
+            const active = b.dataset.pub === state;
+            b.classList.toggle('bg-midnight-900', active);
+            b.classList.toggle('text-white', active);
+            b.classList.toggle('text-midnight-600', !active);
+            b.classList.toggle('hover:bg-midnight-100', !active);
+        });
+    }
+    function setPubState(state) {
+        paintPub(state);
+        if (state === 'draft') {
+            pubSched.classList.add('hidden');
+            pubHidden.value = '';
+        } else if (state === 'now') {
+            pubSched.classList.add('hidden');
+            pubHidden.value = dtLocal(new Date());
+        } else {
+            pubSched.classList.remove('hidden');
+            if (!pubPicker.value) { const d = new Date(); d.setDate(d.getDate() + 1); pubPicker.value = dtLocal(d); }
+            pubHidden.value = pubPicker.value;
+        }
+        formDirty = true;
+    }
+    pubBtns.forEach(b => b.addEventListener('click', () => setPubState(b.dataset.pub)));
+    pubPicker.addEventListener('input', () => { pubHidden.value = pubPicker.value; });
+    // Pintar el estado inicial sin alterar valores ni marcar cambios.
+    paintPub(pubWrap.dataset.initial);
+    if (pubWrap.dataset.initial === 'schedule') pubSched.classList.remove('hidden');
+
+    // init
+    updateStats();
+    updatePreview();
 })();
 </script>
 </body>

@@ -74,12 +74,31 @@
         {{-- Contenido --}}
         <div class="py-16 bg-white">
             <div class="max-w-3xl mx-auto px-6 lg:px-8">
-                <div class="prose prose-slate prose-lg max-w-none
-                            prose-headings:font-serif prose-headings:text-midnight-900
+
+                {{-- Tabla de contenidos (si el artículo tiene al menos 2 secciones) --}}
+                @php($toc = $post->tableOfContents())
+                @if(count($toc) >= 2)
+                    <nav aria-label="Tabla de contenidos" class="mb-12 bg-midnight-50 border-l-4 border-gold-500 px-6 py-5">
+                        <p class="text-xs uppercase tracking-[0.2em] text-gold-600 font-semibold mb-3">En este artículo</p>
+                        <ul class="space-y-2">
+                            @foreach($toc as $item)
+                                <li class="{{ $item['level'] === 3 ? 'ml-4' : '' }}">
+                                    <a href="#{{ $item['id'] }}"
+                                       class="text-sm text-midnight-600 hover:text-gold-700 transition-colors">
+                                        {{ $item['text'] }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </nav>
+                @endif
+
+                <div class="prose prose-slate prose-lg max-w-none scroll-smooth
+                            prose-headings:font-serif prose-headings:text-midnight-900 prose-headings:scroll-mt-24
                             prose-p:text-midnight-600 prose-p:leading-relaxed
                             prose-a:text-gold-600 prose-a:no-underline hover:prose-a:underline
                             prose-strong:text-midnight-800">
-                    {!! $post->content !!}
+                    {!! $post->contentWithAnchors() !!}
                 </div>
 
                 {{-- CTA --}}

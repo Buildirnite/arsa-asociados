@@ -48,6 +48,37 @@
             </div>
         @endif
 
+        {{-- Buscador y filtros --}}
+        <form method="GET" class="flex flex-wrap items-center gap-3 mb-6">
+            <input type="text" name="q" value="{{ request('q') }}" placeholder="Buscar por título…"
+                   class="flex-1 min-w-[200px] px-4 py-2.5 border border-midnight-200 text-sm text-midnight-900 focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition-colors">
+
+            <select name="status"
+                    class="px-4 py-2.5 border border-midnight-200 text-sm text-midnight-700 bg-white focus:outline-none focus:border-gold-500 transition-colors">
+                <option value="">Todos los estados</option>
+                <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Publicados</option>
+                <option value="scheduled" {{ request('status') === 'scheduled' ? 'selected' : '' }}>Programados</option>
+                <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Borradores</option>
+            </select>
+
+            <select name="category"
+                    class="px-4 py-2.5 border border-midnight-200 text-sm text-midnight-700 bg-white focus:outline-none focus:border-gold-500 transition-colors">
+                <option value="">Todas las categorías</option>
+                @foreach($categories as $cat)
+                    <option value="{{ $cat }}" {{ request('category') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                @endforeach
+            </select>
+
+            <button type="submit"
+                    class="px-5 py-2.5 bg-midnight-900 text-white text-sm font-medium hover:bg-midnight-800 transition-colors">
+                Filtrar
+            </button>
+            @if(request()->hasAny(['q', 'status', 'category']))
+                <a href="{{ route('admin.posts.index') }}"
+                   class="px-4 py-2.5 text-sm text-midnight-400 hover:text-midnight-700 transition-colors">Limpiar</a>
+            @endif
+        </form>
+
         <div class="bg-white border border-midnight-100">
             @forelse($posts as $post)
                 <div class="flex items-center justify-between px-6 py-4 border-b border-midnight-50 last:border-0 hover:bg-midnight-50 transition-colors">
@@ -82,7 +113,11 @@
                 </div>
             @empty
                 <div class="px-6 py-12 text-center text-sm text-midnight-400">
-                    No hay artículos. <a href="{{ route('admin.posts.create') }}" class="text-gold-600 hover:underline">Crear el primero</a>.
+                    @if(request()->hasAny(['q', 'status', 'category']))
+                        No se encontraron artículos con esos filtros.
+                    @else
+                        No hay artículos. <a href="{{ route('admin.posts.create') }}" class="text-gold-600 hover:underline">Crear el primero</a>.
+                    @endif
                 </div>
             @endforelse
         </div>

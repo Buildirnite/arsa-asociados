@@ -23,13 +23,43 @@ document.addEventListener('DOMContentLoaded', () => {
             attributes: {
                 class: 'prose prose-slate prose-sm max-w-none min-h-[420px] px-6 py-5 focus:outline-none',
             },
+            handlePaste: (view, event) => insertDroppedImages(event.clipboardData?.files),
+            handleDrop:  (view, event) => insertDroppedImages(event.dataTransfer?.files),
         },
         onUpdate({ editor }) {
             inputEl.value = editor.getHTML()
+            // Notifica al formulario (contador de palabras, autoguardado, semáforo…)
+            inputEl.dispatchEvent(new Event('input', { bubbles: true }))
         },
     })
 
     const token = document.querySelector('meta[name="csrf-token"]')?.content
+
+    // --- Subida de imágenes: reutilizada por el botón, arrastrar y pegar ---
+    async function uploadImage(file) {
+        const formData = new FormData()
+        formData.append('image', file)
+        formData.append('_token', token)
+        const res  = await fetch('/admin/upload-image', { method: 'POST', body: formData })
+        const data = await res.json()
+        return data.url
+    }
+
+    async function insertImage(file) {
+        try {
+            const url = await uploadImage(file)
+            if (url) editor.chain().focus().setImage({ src: url, alt: file.name }).run()
+        } catch {
+            alert('Error al subir la imagen. Intente nuevamente.')
+        }
+    }
+
+    function insertDroppedImages(fileList) {
+        const images = Array.from(fileList || []).filter(f => f.type.startsWith('image/'))
+        if (!images.length) return false
+        images.forEach(insertImage)
+        return true
+    }
 
     const actions = {
         bold:         () => editor.chain().focus().toggleBold().run(),
@@ -55,19 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const input = document.createElement('input')
             input.type   = 'file'
             input.accept = 'image/jpeg,image/png,image/webp'
-            input.onchange = async () => {
-                const file = input.files[0]
-                if (!file) return
-                const formData = new FormData()
-                formData.append('image', file)
-                formData.append('_token', token)
-                try {
-                    const res  = await fetch('/admin/upload-image', { method: 'POST', body: formData })
-                    const data = await res.json()
-                    if (data.url) editor.chain().focus().setImage({ src: data.url, alt: file.name }).run()
-                } catch {
-                    alert('Error al subir la imagen. Intente nuevamente.')
-                }
+            input.onchange = () => {
+                if (input.files[0]) insertImage(input.files[0])
             }
             input.click()
         },
@@ -104,4 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     editor.on('selectionUpdate', updateActiveStates)
     editor.on('transaction', updateActiveStates)
+
+    // Restaurar contenido desde un borrador autoguardado (form.blade.php)
+    window.addEventListener('restore-editor', (e) => {
+        editor.commands.setContent(e.detail || '')
+    })
 })

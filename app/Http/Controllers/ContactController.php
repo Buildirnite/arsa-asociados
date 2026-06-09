@@ -10,6 +10,12 @@ class ContactController extends Controller
 {
     public function store(Request $request)
     {
+        // Protección anti-bots. Si se detecta spam, fingimos éxito sin guardar
+        // ni enviar nada: así el bot no sabe que fue bloqueado.
+        if ($this->isSpam($request)) {
+            return back()->with('success', '¡Mensaje enviado! Nos pondremos en contacto a la brevedad.');
+        }
+
         $validated = $request->validate([
             'name'    => ['required', 'string', 'max:100'],
             'email'   => ['required', 'email', 'max:150'],
@@ -31,5 +37,21 @@ class ContactController extends Controller
         return back()
             ->with('success', '¡Mensaje enviado! Nos pondremos en contacto a la brevedad.')
             ->withInput([]);
+    }
+
+    /**
+     * Detecta envíos automatizados mediante dos trampas:
+     *  1. Honeypot: un campo oculto que solo los bots rellenan.
+     *  2. Time-trap: un humano tarda más de 3 segundos en completar el formulario.
+     */
+    protected function isSpam(Request $request): bool
+    {
+        if (filled($request->input('website'))) {
+            return true;
+        }
+
+        $loadedAt = (int) $request->input('form_loaded_at');
+
+        return $loadedAt > 0 && (now()->timestamp - $loadedAt) < 3;
     }
 }
