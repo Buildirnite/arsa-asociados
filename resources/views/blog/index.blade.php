@@ -83,7 +83,7 @@
                             @if($post->image)
                                 <div class="overflow-hidden">
                                     <img src="{{ Storage::url($post->image) }}"
-                                         alt="{{ $post->title }}"
+                                         alt="{{ $post->title }}" loading="lazy"
                                          class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
                                 </div>
                             @endif

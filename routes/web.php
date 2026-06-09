@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\AppointmentAdminController;
 use App\Http\Controllers\Admin\ContactMessageAdminController;
 use App\Http\Controllers\Admin\PostAdminController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PracticeAreaController;
 use App\Http\Middleware\AdminPassword;
 use Illuminate\Support\Facades\Route;
 
@@ -13,11 +16,17 @@ Route::get('/', function () {
 
 Route::post('/contacto', [ContactController::class, 'store'])->name('contact.store')->middleware('throttle:3,1');
 
+Route::get('/agendar', [AppointmentController::class, 'create'])->name('agendar.create');
+Route::get('/agendar/horarios', [AppointmentController::class, 'slots'])->name('agendar.slots');
+Route::post('/agendar', [AppointmentController::class, 'store'])->name('agendar.store')->middleware('throttle:5,1');
+
 Route::get('/sitemap.xml', function () {
     $posts = \App\Models\Post::published()->orderByDesc('updated_at')->get();
     return response()->view('sitemap', compact('posts'))
         ->header('Content-Type', 'application/xml');
 });
+
+Route::get('/servicios/{slug}', [PracticeAreaController::class, 'show'])->name('services.show');
 
 Route::get('/politica-de-privacidad', fn () => view('legal.privacy'))->name('legal.privacy');
 Route::get('/terminos-de-uso', fn () => view('legal.terms'))->name('legal.terms');
@@ -37,4 +46,6 @@ Route::prefix('admin')->name('admin.')->middleware(AdminPassword::class)->group(
     Route::resource('posts', PostAdminController::class);
     Route::get('mensajes', [ContactMessageAdminController::class, 'index'])->name('mensajes.index');
     Route::patch('mensajes/{message}/leer', [ContactMessageAdminController::class, 'markRead'])->name('mensajes.markRead');
+    Route::get('citas', [AppointmentAdminController::class, 'index'])->name('citas.index');
+    Route::patch('citas/{appointment}', [AppointmentAdminController::class, 'updateStatus'])->name('citas.updateStatus');
 });

@@ -34,6 +34,19 @@ class ContactController extends Controller
                 );
         });
 
+        // Confirmación automática al cliente. Si falla, no debe afectar el flujo.
+        try {
+            Mail::send([], [], function ($mail) use ($validated) {
+                $mail->to($validated['email'], $validated['name'])
+                    ->subject('Hemos recibido su consulta — Arsa & Asociados')
+                    ->html(
+                        view('emails.contact-confirmation', $validated)->render()
+                    );
+            });
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
         return back()
             ->with('success', '¡Mensaje enviado! Nos pondremos en contacto a la brevedad.')
             ->withInput([]);

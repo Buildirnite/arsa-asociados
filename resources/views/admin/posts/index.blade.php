@@ -26,9 +26,13 @@
                class="text-sm font-medium text-midnight-500 hover:text-midnight-900 transition-colors pb-4 -mb-4">
                 Mensajes
             </a>
+            <a href="{{ route('admin.citas.index') }}"
+               class="text-sm font-medium text-midnight-500 hover:text-midnight-900 transition-colors pb-4 -mb-4">
+                Citas
+            </a>
         </div>
 
-        <div class="flex items-center justify-between mb-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
             <h1 class="text-2xl font-serif font-semibold text-midnight-900">Artículos del blog</h1>
             <div class="flex items-center gap-3">
                 <a href="{{ route('admin.posts.export') }}"
@@ -81,10 +85,10 @@
 
         <div class="bg-white border border-midnight-100">
             @forelse($posts as $post)
-                <div class="flex items-center justify-between px-6 py-4 border-b border-midnight-50 last:border-0 hover:bg-midnight-50 transition-colors">
-                    <div class="flex-1 min-w-0 mr-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 px-6 py-4 border-b border-midnight-50 last:border-0 hover:bg-midnight-50 transition-colors">
+                    <div class="flex-1 min-w-0">
                         <p class="text-sm font-medium text-midnight-900 truncate">{{ $post->title }}</p>
-                        <div class="flex items-center gap-3 mt-1">
+                        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
                             <span class="text-xs text-gold-600">{{ $post->category }}</span>
                             <span class="text-xs text-midnight-400">
                                 @if($post->isPublished())

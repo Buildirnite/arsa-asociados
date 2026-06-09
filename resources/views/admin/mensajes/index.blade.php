@@ -29,6 +29,10 @@
                     <span class="inline-flex items-center justify-center w-5 h-5 text-xs font-bold bg-gold-500 text-white rounded-full">{{ $unread }}</span>
                 @endif
             </span>
+            <a href="{{ route('admin.citas.index') }}"
+               class="text-sm font-medium text-midnight-500 hover:text-midnight-900 transition-colors pb-4 -mb-4">
+                Citas
+            </a>
         </div>
 
         <div class="flex items-center justify-between mb-6">

@@ -341,6 +341,39 @@
         })();
     </script>
 
+    {{-- Botón de llamada directa --}}
+    <a href="tel:+56930676693" aria-label="Llamar por teléfono"
+       class="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full bg-midnight-900 flex items-center justify-center shadow-lg hover:bg-midnight-800 transition-colors group">
+        <span class="hidden group-hover:flex absolute left-16 items-center bg-midnight-900 text-white text-xs font-medium px-3 py-2 shadow-lg whitespace-nowrap">
+            +569 3067 6693
+        </span>
+        <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/>
+        </svg>
+    </a>
+
+    {{-- Botón volver arriba (aparece al hacer scroll, apilado sobre el de llamada) --}}
+    <button id="back-to-top" aria-label="Volver arriba" type="button"
+            class="hidden fixed bottom-24 left-6 z-40 w-11 h-11 rounded-full bg-midnight-900/90 text-white items-center justify-center shadow-lg hover:bg-midnight-800 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+        </svg>
+    </button>
+    <script>
+        (function () {
+            const btn = document.getElementById('back-to-top');
+            if (!btn) return;
+            const onScroll = () => {
+                const show = window.scrollY > 600;
+                btn.classList.toggle('hidden', !show);
+                btn.classList.toggle('flex', show);
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+            onScroll();
+        })();
+    </script>
+
     {{-- Mobile menu toggle --}}
     <script>
         document.getElementById('mobile-menu-btn').addEventListener('click', function () {

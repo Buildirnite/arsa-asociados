@@ -65,7 +65,7 @@
             <div class="bg-midnight-900">
                 <div class="max-w-3xl mx-auto">
                     <img src="{{ Storage::url($post->image) }}"
-                         alt="{{ $post->title }}"
+                         alt="{{ $post->title }}" loading="lazy"
                          class="w-full max-h-[480px] object-cover">
                 </div>
             </div>
@@ -105,7 +105,7 @@
                 <div class="mt-16 bg-midnight-50 p-8 border-l-4 border-gold-500">
                     <p class="text-sm font-semibold text-midnight-900 mb-2">¿Tiene dudas sobre su caso?</p>
                     <p class="text-sm text-midnight-500 mb-4">La primera consulta es sin costo. Contáctenos y le orientamos.</p>
-                    <a href="{{ url('/#contacto') }}"
+                    <a href="{{ route('agendar.create') }}"
                        class="inline-flex items-center px-6 py-2.5 bg-midnight-900 text-white text-sm font-medium hover:bg-midnight-800 transition-colors">
                         Agendar consulta
                     </a>

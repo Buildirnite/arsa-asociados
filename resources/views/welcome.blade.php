@@ -1,5 +1,34 @@
 <x-layout title="Arsa & Asociados — Asesoría Jurídica en Santiago de Chile">
 
+    @php
+        $faqs = [
+            ['¿La primera consulta tiene costo?', 'No. La primera consulta es sin costo y sin compromiso. Escuchamos su caso y le orientamos sobre las opciones disponibles.'],
+            ['¿Atienden de forma presencial u online?', 'Ambas. Puede coordinar una reunión presencial en Santiago o una videollamada, según lo que le resulte más cómodo.'],
+            ['¿Cuánto demoran en responder?', 'Respondemos los mensajes del formulario y de WhatsApp normalmente dentro del mismo día hábil.'],
+            ['¿Cómo funcionan los honorarios?', 'Definimos los honorarios de forma transparente según la complejidad de cada caso y se los informamos con claridad antes de iniciar cualquier gestión.'],
+            ['¿En qué áreas del derecho se especializan?', 'Atendemos Derecho Civil, Laboral, de Familia, Inmobiliario, Penal y Cobranza Judicial. Puede ver el detalle de cada área en la sección de servicios.'],
+            ['¿Qué necesito para mi primera consulta?', 'Solo describirnos su situación. Si tiene documentos relacionados (contratos, notificaciones, etc.), tenerlos a mano nos ayuda a orientarle mejor.'],
+        ];
+    @endphp
+
+    <x-slot:headExtra>
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "FAQPage",
+        "mainEntity": [
+            @foreach($faqs as $faq)
+            {
+                "@@type": "Question",
+                "name": {{ json_encode($faq[0]) }},
+                "acceptedAnswer": { "@@type": "Answer", "text": {{ json_encode($faq[1]) }} }
+            }@if(!$loop->last),@endif
+            @endforeach
+        ]
+    }
+    </script>
+    </x-slot:headExtra>
+
     {{-- Hero --}}
     <section id="inicio" class="relative overflow-hidden">
         <div class="geo-wrap" aria-hidden="true">
@@ -35,7 +64,7 @@
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 reveal delay-3">
-                    <a href="/#contacto"
+                    <a href="{{ route('agendar.create') }}"
                        class="inline-flex items-center justify-center px-8 py-3.5 bg-midnight-900 text-white font-semibold text-sm hover:bg-midnight-800 hover:scale-[1.03] transition-all duration-200">
                         Agendar consulta
                     </a>
@@ -126,83 +155,22 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {{-- Servicio 1 --}}
-                <div class="group p-8 border border-midnight-100 hover:border-gold-300 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 reveal">
-                    <div class="w-12 h-12 bg-gold-50 flex items-center justify-center mb-6 group-hover:bg-gold-100 transition-colors">
-                        <svg class="w-6 h-6 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-serif font-semibold text-midnight-900 mb-3">Derecho Civil</h3>
-                    <p class="text-sm text-midnight-500 leading-relaxed">
-                        Contratos, propiedad, responsabilidad civil, herencias y sucesiones. Protegemos su patrimonio con rigurosidad.
-                    </p>
-                </div>
-
-                {{-- Servicio 2 --}}
-                <div class="group p-8 border border-midnight-100 hover:border-gold-300 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 reveal delay-1">
-                    <div class="w-12 h-12 bg-gold-50 flex items-center justify-center mb-6 group-hover:bg-gold-100 transition-colors">
-                        <svg class="w-6 h-6 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-serif font-semibold text-midnight-900 mb-3">Derecho Laboral</h3>
-                    <p class="text-sm text-midnight-500 leading-relaxed">
-                        Despidos, finiquitos, negociación colectiva y defensa ante tribunales laborales para trabajadores y empresas.
-                    </p>
-                </div>
-
-                {{-- Servicio 3 --}}
-                <div class="group p-8 border border-midnight-100 hover:border-gold-300 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 reveal delay-2">
-                    <div class="w-12 h-12 bg-gold-50 flex items-center justify-center mb-6 group-hover:bg-gold-100 transition-colors">
-                        <svg class="w-6 h-6 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-serif font-semibold text-midnight-900 mb-3">Derecho de Familia</h3>
-                    <p class="text-sm text-midnight-500 leading-relaxed">
-                        Divorcios, pensiones alimenticias, cuidado personal y régimen de visitas. Enfoque humano y resolutivo.
-                    </p>
-                </div>
-
-                {{-- Servicio 4 --}}
-                <div class="group p-8 border border-midnight-100 hover:border-gold-300 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 reveal delay-3">
-                    <div class="w-12 h-12 bg-gold-50 flex items-center justify-center mb-6 group-hover:bg-gold-100 transition-colors">
-                        <svg class="w-6 h-6 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-serif font-semibold text-midnight-900 mb-3">Derecho Inmobiliario</h3>
-                    <p class="text-sm text-midnight-500 leading-relaxed">
-                        Compraventa, arriendos, estudio de títulos y regularización de propiedades con total seguridad jurídica.
-                    </p>
-                </div>
-
-                {{-- Servicio 5 --}}
-                <div class="group p-8 border border-midnight-100 hover:border-gold-300 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 reveal delay-4">
-                    <div class="w-12 h-12 bg-gold-50 flex items-center justify-center mb-6 group-hover:bg-gold-100 transition-colors">
-                        <svg class="w-6 h-6 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-serif font-semibold text-midnight-900 mb-3">Cobranza Judicial</h3>
-                    <p class="text-sm text-midnight-500 leading-relaxed">
-                        Recuperación efectiva de créditos y deudas mediante gestión prejudicial y procedimientos ejecutivos.
-                    </p>
-                </div>
-
-                {{-- Servicio 6 --}}
-                <div class="group p-8 border border-midnight-100 hover:border-gold-300 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 reveal delay-5">
-                    <div class="w-12 h-12 bg-gold-50 flex items-center justify-center mb-6 group-hover:bg-gold-100 transition-colors">
-                        <svg class="w-6 h-6 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-serif font-semibold text-midnight-900 mb-3">Derecho Penal</h3>
-                    <p class="text-sm text-midnight-500 leading-relaxed">
-                        Defensa penal, querellas y representación ante tribunales de garantía y juicio oral con máxima dedicación.
-                    </p>
-                </div>
+                @foreach(\App\Support\PracticeAreas::all() as $area)
+                    <a href="{{ route('services.show', $area['slug']) }}"
+                       class="group p-8 border border-midnight-100 hover:border-gold-300 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 reveal{{ $loop->index ? ' delay-' . $loop->index : '' }}">
+                        <div class="w-12 h-12 bg-gold-50 flex items-center justify-center mb-6 group-hover:bg-gold-100 transition-colors">
+                            <svg class="w-6 h-6 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $area['icon'] }}"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-serif font-semibold text-midnight-900 mb-3">{{ $area['name'] }}</h3>
+                        <p class="text-sm text-midnight-500 leading-relaxed">{{ $area['tagline'] }}</p>
+                        <span class="inline-flex items-center gap-1 mt-4 text-sm font-medium text-gold-600 group-hover:gap-2 transition-all">
+                            Ver más
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </span>
+                    </a>
+                @endforeach
             </div>
         </div>
     </section>
@@ -456,6 +424,34 @@
     </section>
 
     {{-- Contacto --}}
+    {{-- Preguntas frecuentes --}}
+    <section id="faq" class="py-24 lg:py-32 bg-white relative overflow-hidden">
+        <div class="max-w-3xl mx-auto px-6 lg:px-8 relative">
+            <div class="max-w-2xl mb-12 reveal">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="h-px w-12 bg-gold-500"></div>
+                    <span class="text-xs uppercase tracking-[0.3em] text-gold-600 font-semibold">Preguntas frecuentes</span>
+                </div>
+                <h2 class="text-3xl lg:text-4xl font-serif font-semibold text-midnight-900">
+                    Resolvemos sus dudas
+                </h2>
+            </div>
+            <div class="space-y-4">
+                @foreach($faqs as $faq)
+                    <details class="group bg-midnight-50 border border-midnight-100 px-6 py-5 reveal">
+                        <summary class="flex items-center justify-between cursor-pointer list-none">
+                            <span class="text-base font-semibold text-midnight-900 pr-4">{{ $faq[0] }}</span>
+                            <svg class="w-5 h-5 text-gold-500 shrink-0 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </summary>
+                        <p class="mt-4 text-sm text-midnight-600 leading-relaxed">{{ $faq[1] }}</p>
+                    </details>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     <section id="contacto" class="py-24 lg:py-32 bg-white relative overflow-hidden">
         <div class="geo-wrap" aria-hidden="true">
             <div style="position:absolute;width:80px;height:80px;top:8%;right:5%;border:1.5px solid rgba(185,146,63,0.30);animation:geo-f2 24s ease-in-out infinite;"></div>

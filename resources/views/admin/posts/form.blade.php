@@ -218,10 +218,10 @@
             @endphp
             <div class="pt-2">
                 <label class="block text-sm font-medium text-midnight-700 mb-2">Publicación</label>
-                <div class="inline-flex border border-midnight-200 rounded overflow-hidden" id="pub-options" data-initial="{{ $pubState }}">
-                    <button type="button" data-pub="draft"    class="pub-btn px-4 py-2.5 text-sm border-r border-midnight-200 transition-colors">Borrador</button>
-                    <button type="button" data-pub="now"      class="pub-btn px-4 py-2.5 text-sm border-r border-midnight-200 transition-colors">Publicar ahora</button>
-                    <button type="button" data-pub="schedule" class="pub-btn px-4 py-2.5 text-sm transition-colors">Programar</button>
+                <div class="flex flex-wrap gap-2" id="pub-options" data-initial="{{ $pubState }}">
+                    <button type="button" data-pub="draft"    class="pub-btn px-4 py-2.5 text-sm border border-midnight-200 rounded transition-colors">Borrador</button>
+                    <button type="button" data-pub="now"      class="pub-btn px-4 py-2.5 text-sm border border-midnight-200 rounded transition-colors">Publicar ahora</button>
+                    <button type="button" data-pub="schedule" class="pub-btn px-4 py-2.5 text-sm border border-midnight-200 rounded transition-colors">Programar</button>
                 </div>
                 <div id="pub-schedule" class="mt-3 hidden">
                     <input type="datetime-local" id="publish-at-picker" value="{{ $pubState === 'schedule' ? $pubInitial : '' }}"

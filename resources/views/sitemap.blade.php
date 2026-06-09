@@ -8,10 +8,24 @@
     </url>
 
     <url>
+        <loc>{{ route('agendar.create') }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
         <loc>{{ route('blog.index') }}</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
+
+    @foreach(\App\Support\PracticeAreas::all() as $area)
+    <url>
+        <loc>{{ route('services.show', $area['slug']) }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    @endforeach
 
     @foreach($posts as $post)
     <url>
