@@ -70,15 +70,24 @@
                             <span>{{ $msg->created_at->format('d M Y, H:i') }}</span>
                         </div>
                     </div>
-                    @if(! $msg->isRead())
-                        <form method="POST" action="{{ route('admin.mensajes.markRead', $msg) }}">
-                            @csrf @method('PATCH')
+                    <div class="flex items-center gap-2 shrink-0">
+                        @if(! $msg->isRead())
+                            <form method="POST" action="{{ route('admin.mensajes.markRead', $msg) }}">
+                                @csrf @method('PATCH')
+                                <button type="submit"
+                                        class="text-xs font-medium text-midnight-500 hover:text-midnight-900 border border-midnight-200 hover:border-midnight-400 px-3 py-1.5 transition-colors">
+                                    Marcar como leído
+                                </button>
+                            </form>
+                        @endif
+                        <form method="POST" action="{{ route('admin.mensajes.destroy', $msg) }}" onsubmit="return confirm('¿Eliminar este mensaje definitivamente? Esta acción no se puede deshacer.')">
+                            @csrf @method('DELETE')
                             <button type="submit"
-                                    class="text-xs font-medium text-midnight-500 hover:text-midnight-900 border border-midnight-200 hover:border-midnight-400 px-3 py-1.5 transition-colors shrink-0">
-                                Marcar como leído
+                                    class="text-xs font-medium text-red-500 hover:text-white hover:bg-red-500 border border-red-200 hover:border-red-500 px-3 py-1.5 transition-colors">
+                                Eliminar
                             </button>
                         </form>
-                    @endif
+                    </div>
                 </div>
                 <p class="text-sm text-midnight-600 leading-relaxed whitespace-pre-wrap">{{ $msg->message }}</p>
             </div>

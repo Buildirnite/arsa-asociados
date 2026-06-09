@@ -105,8 +105,12 @@
                         Blog
                     </a>
                     <a href="/#contacto"
-                       class="inline-flex items-center px-5 py-2.5 bg-midnight-900 text-white text-sm font-medium hover:bg-midnight-800 transition-colors">
+                       class="inline-flex items-center px-5 py-2.5 border border-midnight-300 text-midnight-800 text-sm font-medium hover:border-midnight-900 hover:text-midnight-900 transition-colors">
                         Contacto
+                    </a>
+                    <a href="{{ route('agendar.create') }}"
+                       class="inline-flex items-center px-5 py-2.5 bg-gold-500 text-midnight-950 text-sm font-semibold hover:bg-gold-400 transition-colors {{ request()->routeIs('agendar.*') ? 'ring-2 ring-gold-300' : '' }}">
+                        Agendar hora
                     </a>
                 </div>
 
@@ -127,7 +131,10 @@
                     <a href="/#nosotros" class="text-sm font-medium text-midnight-700 hover:text-midnight-900 transition-colors">Nosotros</a>
                     <a href="/#testimonios" class="text-sm font-medium text-midnight-700 hover:text-midnight-900 transition-colors">Testimonios</a>
                     <a href="{{ route('blog.index') }}" class="text-sm font-medium text-midnight-700 hover:text-midnight-900 transition-colors">Blog</a>
-                    <a href="/#contacto" class="inline-flex items-center justify-center px-5 py-2.5 bg-midnight-900 text-white text-sm font-medium hover:bg-midnight-800 transition-colors">Contacto</a>
+                    <div class="flex gap-3 pt-2">
+                        <a href="/#contacto" class="flex-1 inline-flex items-center justify-center px-5 py-2.5 border border-midnight-300 text-midnight-800 text-sm font-medium hover:border-midnight-900 transition-colors">Contacto</a>
+                        <a href="{{ route('agendar.create') }}" class="flex-1 inline-flex items-center justify-center px-5 py-2.5 bg-gold-500 text-midnight-950 text-sm font-semibold hover:bg-gold-400 transition-colors">Agendar hora</a>
+                    </div>
                 </div>
             </div>
         </nav>

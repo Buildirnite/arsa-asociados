@@ -18,13 +18,6 @@
     <section class="py-12 lg:py-16 bg-midnight-50">
         <div class="max-w-3xl mx-auto px-6 lg:px-8">
 
-            @if(session('success'))
-                <div class="mb-8 flex items-start gap-3 bg-green-50 border border-green-200 px-5 py-4">
-                    <svg class="w-6 h-6 text-green-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-                    <p class="text-sm text-green-800">{{ session('success') }}</p>
-                </div>
-            @endif
-
             @if($errors->any())
                 <div class="mb-8 px-5 py-4 bg-red-50 border border-red-200 text-sm text-red-700">
                     <ul class="list-disc list-inside space-y-1">
@@ -91,8 +84,8 @@
                     </div>
                 </div>
 
-                <button type="submit"
-                        class="w-full px-8 py-3.5 bg-midnight-900 text-white font-semibold text-sm hover:bg-midnight-800 transition-colors">
+                <button type="submit" id="submit-btn"
+                        class="w-full px-8 py-3.5 bg-midnight-900 text-white font-semibold text-sm hover:bg-midnight-800 transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
                     Confirmar cita
                 </button>
             </form>
@@ -155,11 +148,24 @@
             dateInput.addEventListener('change', loadSlots);
             if (dateInput.value) loadSlots();
 
-            document.getElementById('appointment-form').addEventListener('submit', (e) => {
+            const form      = document.getElementById('appointment-form');
+            const submitBtn = document.getElementById('submit-btn');
+            let submitting  = false;
+
+            form.addEventListener('submit', (e) => {
                 if (!slotInput.value) {
                     e.preventDefault();
                     alert('Por favor seleccione un horario disponible.');
+                    return;
                 }
+                // Evita envíos múltiples (doble clic) que disparan el error 429.
+                if (submitting) {
+                    e.preventDefault();
+                    return;
+                }
+                submitting = true;
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Enviando…';
             });
         })();
     </script>

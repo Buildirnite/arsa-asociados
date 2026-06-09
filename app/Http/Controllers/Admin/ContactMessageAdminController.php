@@ -25,4 +25,11 @@ class ContactMessageAdminController extends Controller
 
         return back()->with('success', 'Mensaje marcado como leído.');
     }
+
+    public function destroy(ContactMessage $message): RedirectResponse
+    {
+        $message->delete();
+
+        return back()->with('success', 'Mensaje eliminado.');
+    }
 }

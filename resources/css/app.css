@@ -92,3 +92,21 @@ section[id] { scroll-margin-top: 6rem; }
     --color-midnight-900: #1c2233;
     --color-midnight-950: #121726;
 }
+
+/* Cursor de "manito" en elementos clickeables (los <button> e inputs nativos
+   no lo traen por defecto, solo los enlaces <a>). */
+@layer base {
+    button:not(:disabled),
+    [role="button"]:not([aria-disabled="true"]),
+    summary,
+    label[for] {
+        cursor: pointer;
+    }
+
+    input[type="date"],
+    input[type="datetime-local"],
+    input[type="time"],
+    select {
+        cursor: pointer;
+    }
+}

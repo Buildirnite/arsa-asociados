@@ -30,7 +30,13 @@
         </div>
 
         <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-            <h1 class="text-2xl font-serif font-semibold text-midnight-900">Citas agendadas</h1>
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-serif font-semibold text-midnight-900">Citas agendadas</h1>
+                <a href="{{ route('admin.citas.create') }}"
+                   class="inline-flex items-center gap-1 px-4 py-2 bg-gold-500 text-midnight-950 text-sm font-semibold hover:bg-gold-400 transition-colors">
+                    + Nueva cita
+                </a>
+            </div>
             <div class="flex gap-2 text-sm">
                 @php
                     $estados = ['' => 'Todas', 'pendiente' => 'Pendientes', 'confirmada' => 'Confirmadas', 'cancelada' => 'Canceladas'];
@@ -75,7 +81,7 @@
                             <p class="mt-3 text-sm text-midnight-600 leading-relaxed bg-midnight-50 border-l-2 border-gold-300 px-3 py-2 whitespace-pre-wrap">{{ $cita->message }}</p>
                         @endif
                     </div>
-                    <div class="flex items-center gap-2 shrink-0">
+                    <div class="flex flex-wrap items-center gap-2 shrink-0">
                         @if($cita->status !== 'confirmada')
                             <form method="POST" action="{{ route('admin.citas.updateStatus', $cita) }}">
                                 @csrf @method('PATCH')
@@ -90,6 +96,12 @@
                                 <button type="submit" class="text-xs font-medium text-red-400 hover:text-red-600 border border-midnight-200 hover:border-red-300 px-3 py-1.5 transition-colors">Cancelar</button>
                             </form>
                         @endif
+                        <a href="{{ route('admin.citas.edit', $cita) }}"
+                           class="text-xs font-medium text-midnight-600 hover:text-midnight-900 border border-midnight-200 hover:border-midnight-400 px-3 py-1.5 transition-colors">Editar</a>
+                        <form method="POST" action="{{ route('admin.citas.destroy', $cita) }}" onsubmit="return confirm('¿Eliminar esta cita definitivamente? Esta acción no se puede deshacer.')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="text-xs font-medium text-red-500 hover:text-white hover:bg-red-500 border border-red-200 hover:border-red-500 px-3 py-1.5 transition-colors">Eliminar</button>
+                        </form>
                     </div>
                 </div>
             </div>

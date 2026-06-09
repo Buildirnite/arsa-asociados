@@ -18,6 +18,7 @@ Route::post('/contacto', [ContactController::class, 'store'])->name('contact.sto
 
 Route::get('/agendar', [AppointmentController::class, 'create'])->name('agendar.create');
 Route::get('/agendar/horarios', [AppointmentController::class, 'slots'])->name('agendar.slots');
+Route::get('/agendar/listo', [AppointmentController::class, 'confirmation'])->name('agendar.confirmacion');
 Route::post('/agendar', [AppointmentController::class, 'store'])->name('agendar.store')->middleware('throttle:5,1');
 
 Route::get('/sitemap.xml', function () {
@@ -46,6 +47,14 @@ Route::prefix('admin')->name('admin.')->middleware(AdminPassword::class)->group(
     Route::resource('posts', PostAdminController::class);
     Route::get('mensajes', [ContactMessageAdminController::class, 'index'])->name('mensajes.index');
     Route::patch('mensajes/{message}/leer', [ContactMessageAdminController::class, 'markRead'])->name('mensajes.markRead');
+    Route::delete('mensajes/{message}', [ContactMessageAdminController::class, 'destroy'])->name('mensajes.destroy');
+
+    // Citas — rutas específicas antes de las parametrizadas.
     Route::get('citas', [AppointmentAdminController::class, 'index'])->name('citas.index');
+    Route::get('citas/crear', [AppointmentAdminController::class, 'create'])->name('citas.create');
+    Route::post('citas', [AppointmentAdminController::class, 'store'])->name('citas.store');
+    Route::get('citas/{appointment}/editar', [AppointmentAdminController::class, 'edit'])->name('citas.edit');
     Route::patch('citas/{appointment}', [AppointmentAdminController::class, 'updateStatus'])->name('citas.updateStatus');
+    Route::put('citas/{appointment}', [AppointmentAdminController::class, 'update'])->name('citas.update');
+    Route::delete('citas/{appointment}', [AppointmentAdminController::class, 'destroy'])->name('citas.destroy');
 });

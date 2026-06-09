@@ -18,7 +18,7 @@ class AppointmentSlots
 {
     public const OPEN_HOUR   = 9;
     public const CLOSE_HOUR  = 18;
-    public const DURATION    = 45; // minutos
+    public const DURATION    = 60; // minutos — citas en punto (09:00, 10:00, …)
     public const MAX_DAYS_AHEAD = 60;
 
     /** ¿El día está dentro del horario de atención (lun–sáb)? */
@@ -86,5 +86,23 @@ class AppointmentSlots
         return self::isWorkingDay($date)
             && $date->greaterThanOrEqualTo($today)
             && $date->lessThanOrEqualTo($today->copy()->addDays(self::MAX_DAYS_AHEAD));
+    }
+
+    /**
+     * ¿Existe otra cita activa que choque con este horario?
+     *
+     * Dos citas se solapan si sus inicios están a menos de una duración de
+     * distancia (evita reservas exactas y "casi a la misma hora"). Permite
+     * citas adyacentes (p. ej. 09:00 y 10:00 con bloques de 60 min).
+     */
+    public static function hasConflict(CarbonInterface $scheduledAt, ?int $ignoreId = null): bool
+    {
+        return Appointment::active()
+            ->when($ignoreId, fn ($q) => $q->whereKeyNot($ignoreId))
+            ->whereBetween('scheduled_at', [
+                $scheduledAt->copy()->subMinutes(self::DURATION - 1),
+                $scheduledAt->copy()->addMinutes(self::DURATION - 1),
+            ])
+            ->exists();
     }
 }

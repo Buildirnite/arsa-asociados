@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
+use function Illuminate\Support\defer;
+
 class AppointmentController extends Controller
 {
     public function create(): View
@@ -61,6 +63,10 @@ class AppointmentController extends Controller
         [$h, $m] = explode(':', $validated['slot']);
         $scheduledAt = $date->copy()->setTime((int) $h, (int) $m);
 
+        if (AppointmentSlots::hasConflict($scheduledAt)) {
+            throw ValidationException::withMessages(['slot' => 'Ese horario ya fue reservado. Por favor elija otro.']);
+        }
+
         $appointment = Appointment::create([
             'name'         => $validated['name'],
             'email'        => $validated['email'],
@@ -71,11 +77,29 @@ class AppointmentController extends Controller
             'status'       => 'pendiente',
         ]);
 
-        $this->notify($appointment);
+        // Los correos SMTP (Gmail) tardan varios segundos. Se envían después de
+        // responder para que el usuario vea la confirmación al instante.
+        defer(fn () => $this->notify($appointment));
 
         return redirect()
-            ->route('agendar.create')
-            ->with('success', '¡Su cita fue agendada! Le enviamos la confirmación a su correo.');
+            ->route('agendar.confirmacion')
+            ->with('appointment_id', $appointment->id);
+    }
+
+    /** Página de confirmación con el detalle de la cita recién agendada. */
+    public function confirmation(Request $request): View|RedirectResponse
+    {
+        $id = $request->session()->get('appointment_id');
+        $appointment = $id ? Appointment::find($id) : null;
+
+        if (! $appointment) {
+            return redirect()->route('agendar.create');
+        }
+
+        // Mantener el detalle si el usuario refresca la página.
+        $request->session()->keep('appointment_id');
+
+        return view('appointments.confirmation', ['appointment' => $appointment]);
     }
 
     private function notify(Appointment $appointment): void
