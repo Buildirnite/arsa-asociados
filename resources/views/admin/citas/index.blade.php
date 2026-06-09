@@ -32,7 +32,9 @@
         <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
             <h1 class="text-2xl font-serif font-semibold text-midnight-900">Citas agendadas</h1>
             <div class="flex gap-2 text-sm">
-                @php($estados = ['' => 'Todas', 'pendiente' => 'Pendientes', 'confirmada' => 'Confirmadas', 'cancelada' => 'Canceladas'])
+                @php
+                    $estados = ['' => 'Todas', 'pendiente' => 'Pendientes', 'confirmada' => 'Confirmadas', 'cancelada' => 'Canceladas'];
+                @endphp
                 @foreach($estados as $val => $label)
                     <a href="{{ route('admin.citas.index', $val ? ['estado' => $val] : []) }}"
                        class="px-3 py-1.5 border transition-colors {{ request('estado') === $val || (!request('estado') && $val === '') ? 'bg-midnight-900 text-white border-midnight-900' : 'border-midnight-200 text-midnight-600 hover:border-midnight-400' }}">
