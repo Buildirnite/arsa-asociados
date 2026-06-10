@@ -54,8 +54,8 @@ class AppointmentTest extends TestCase
             'phone' => '+56 9 1111 1111',
             'area'  => 'Derecho Civil',
             'date'  => $monday->toDateString(),
-            'slot'  => '10:30',
-        ])->assertRedirect(route('agendar.create'));
+            'slot'  => '10:00',
+        ])->assertRedirect(route('agendar.confirmacion'));
 
         $this->assertDatabaseHas('appointments', [
             'email'  => 'juan@ejemplo.cl',
@@ -69,13 +69,13 @@ class AppointmentTest extends TestCase
 
         Appointment::create([
             'name' => 'Ocupado', 'email' => 'x@x.cl',
-            'scheduled_at' => $monday->copy()->setTime(10, 30),
+            'scheduled_at' => $monday->copy()->setTime(10, 0),
             'status' => 'pendiente',
         ]);
 
         $slots = AppointmentSlots::availableForDay($monday);
 
-        $this->assertNotContains('10:30', $slots);
+        $this->assertNotContains('10:00', $slots);
     }
 
     public function test_cannot_double_book_the_same_slot(): void
@@ -85,7 +85,7 @@ class AppointmentTest extends TestCase
 
         Appointment::create([
             'name' => 'Primero', 'email' => 'a@a.cl',
-            'scheduled_at' => $monday->copy()->setTime(11, 15),
+            'scheduled_at' => $monday->copy()->setTime(11, 0),
             'status' => 'pendiente',
         ]);
 
@@ -93,7 +93,7 @@ class AppointmentTest extends TestCase
             'name'  => 'Segundo',
             'email' => 'b@b.cl',
             'date'  => $monday->toDateString(),
-            'slot'  => '11:15',
+            'slot'  => '11:00',
         ])->assertSessionHasErrors('slot');
 
         $this->assertDatabaseCount('appointments', 1);

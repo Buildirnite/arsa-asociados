@@ -49,9 +49,7 @@ class PostAdminController extends Controller
             ? Str::slug($request->input('slug'))
             : Str::slug($validated['title']);
         $validated['slug'] = $this->uniqueSlug($base);
-        $validated['published_at'] = $request->filled('publish_at')
-            ? \Carbon\Carbon::parse($request->input('publish_at'))
-            : null;
+        $validated['published_at'] = $this->resolvePublishedAt($request->input('publish_at'));
 
         if ($request->hasFile('image')) {
             $validated['image'] = ImageOptimizer::store($request->file('image'), 'posts');
@@ -74,9 +72,7 @@ class PostAdminController extends Controller
         $base = $request->filled('slug') ? Str::slug($request->input('slug')) : $post->slug;
         $validated['slug'] = $this->uniqueSlug($base ?: $post->slug, $post->id);
 
-        $validated['published_at'] = $request->filled('publish_at')
-            ? \Carbon\Carbon::parse($request->input('publish_at'))
-            : null;
+        $validated['published_at'] = $this->resolvePublishedAt($request->input('publish_at'));
 
         if ($request->hasFile('image')) {
             if ($post->image) {
@@ -177,6 +173,23 @@ class PostAdminController extends Controller
         foreach (array_unique($matches[1] ?? []) as $path) {
             Storage::disk('public')->delete($path);
         }
+    }
+
+    /**
+     * Convierte el valor del formulario de publicación en una fecha:
+     *   - vacío          → borrador (null)
+     *   - 'now'          → publicar ya, con la hora exacta del servidor
+     *                      (evita que el desfase de reloj del navegador deje el
+     *                       artículo como "programado" en el futuro)
+     *   - fecha concreta → publicación programada
+     */
+    private function resolvePublishedAt(?string $value): ?\Carbon\Carbon
+    {
+        if (blank($value)) {
+            return null;
+        }
+
+        return $value === 'now' ? now() : \Carbon\Carbon::parse($value);
     }
 
     private function uniqueSlug(string $base, ?int $ignoreId = null): string
