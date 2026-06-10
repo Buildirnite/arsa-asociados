@@ -37,10 +37,7 @@
                 <div class="value">{{ $appointment->email }}</div>
             </div>
             @if($appointment->phone)
-            <div class="field">
-                <div class="label">Teléfono</div>
-                <div class="value">{{ $appointment->phone }}</div>
-            </div>
+                @include('emails.partials.phone-field', ['phone' => $appointment->phone, 'name' => $appointment->name])
             @endif
             @if($appointment->area)
             <div class="field">
