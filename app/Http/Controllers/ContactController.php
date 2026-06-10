@@ -25,33 +25,38 @@ class ContactController extends Controller
 
         ContactMessage::create($validated);
 
-        // Aviso al estudio. El mensaje ya quedó guardado en la BD (lo verán en
-        // /admin/mensajes), así que un fallo de SMTP no debe tumbar el envío.
-        try {
-            Mail::send([], [], function ($mail) use ($validated) {
-                $mail->to(config('app.mail_contact_address', 'catalynaarmas@gmail.com'))
-                    ->replyTo($validated['email'], $validated['name'])
-                    ->subject('Nueva consulta de ' . $validated['name'])
-                    ->html(
-                        view('emails.contact', $validated)->render()
-                    );
-            });
-        } catch (\Throwable $e) {
-            report($e);
-        }
+        // Los correos se envían DESPUÉS de responder al navegador (defer), para
+        // que la confirmación aparezca al instante y no espere a los ~2 conexiones
+        // SMTP. El mensaje ya quedó guardado en la BD (visible en /admin/mensajes),
+        // así que un fallo de SMTP no afecta lo que ve el usuario.
+        defer(function () use ($validated) {
+            // Aviso al estudio.
+            try {
+                Mail::send([], [], function ($mail) use ($validated) {
+                    $mail->to(config('app.mail_contact_address', 'catalynaarmas@gmail.com'))
+                        ->replyTo($validated['email'], $validated['name'])
+                        ->subject('Nueva consulta de ' . $validated['name'])
+                        ->html(
+                            view('emails.contact', $validated)->render()
+                        );
+                });
+            } catch (\Throwable $e) {
+                report($e);
+            }
 
-        // Confirmación automática al cliente. Si falla, no debe afectar el flujo.
-        try {
-            Mail::send([], [], function ($mail) use ($validated) {
-                $mail->to($validated['email'], $validated['name'])
-                    ->subject('Hemos recibido su consulta — Arsa & Asociados')
-                    ->html(
-                        view('emails.contact-confirmation', $validated)->render()
-                    );
-            });
-        } catch (\Throwable $e) {
-            report($e);
-        }
+            // Confirmación automática al cliente.
+            try {
+                Mail::send([], [], function ($mail) use ($validated) {
+                    $mail->to($validated['email'], $validated['name'])
+                        ->subject('Hemos recibido su consulta — Arsa & Asociados')
+                        ->html(
+                            view('emails.contact-confirmation', $validated)->render()
+                        );
+                });
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        });
 
         return back()
             ->with('success', '¡Mensaje enviado! Nos pondremos en contacto a la brevedad.')
