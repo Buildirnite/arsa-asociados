@@ -226,6 +226,44 @@
         </div>
     </footer>
 
+    {{-- Toast de notificación (éxito / error). Aparece tras enviar un formulario. --}}
+    @if(session('success') || session('error'))
+        @php $isError = (bool) session('error'); @endphp
+        <div id="toast" role="status" aria-live="polite"
+             class="fixed top-6 right-6 z-[60] w-[calc(100vw-3rem)] sm:w-auto sm:max-w-sm translate-x-[120%] opacity-0 transition-all duration-500 ease-out">
+            <div class="flex items-start gap-3 bg-white border-l-4 {{ $isError ? 'border-red-500' : 'border-green-500' }} shadow-2xl rounded-lg px-5 py-4">
+                <div class="shrink-0 mt-0.5">
+                    @if($isError)
+                        <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                    @else
+                        <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/>
+                        </svg>
+                    @endif
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-midnight-900">{{ $isError ? 'Ocurrió un problema' : '¡Envío listo!' }}</p>
+                    <p class="text-sm text-midnight-600 mt-0.5">{{ session('error') ?? session('success') }}</p>
+                </div>
+                <button id="toast-close" aria-label="Cerrar" class="shrink-0 text-midnight-300 hover:text-midnight-600 transition-colors -mr-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </div>
+        <script>
+            (function () {
+                const toast = document.getElementById('toast');
+                if (!toast) return;
+                const hide = () => toast.classList.add('translate-x-[120%]', 'opacity-0');
+                requestAnimationFrame(() => setTimeout(() => toast.classList.remove('translate-x-[120%]', 'opacity-0'), 100));
+                let timer = setTimeout(hide, 6000);
+                document.getElementById('toast-close').addEventListener('click', () => { clearTimeout(timer); hide(); });
+            })();
+        </script>
+    @endif
+
     {{-- Widget de WhatsApp --}}
     @php
         $waNumber = '56930676693';

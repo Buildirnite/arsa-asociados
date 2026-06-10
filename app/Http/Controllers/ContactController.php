@@ -25,14 +25,20 @@ class ContactController extends Controller
 
         ContactMessage::create($validated);
 
-        Mail::send([], [], function ($mail) use ($validated) {
-            $mail->to(config('app.mail_contact_address', 'catalynaarmas@gmail.com'))
-                ->replyTo($validated['email'], $validated['name'])
-                ->subject('Nueva consulta de ' . $validated['name'])
-                ->html(
-                    view('emails.contact', $validated)->render()
-                );
-        });
+        // Aviso al estudio. El mensaje ya quedó guardado en la BD (lo verán en
+        // /admin/mensajes), así que un fallo de SMTP no debe tumbar el envío.
+        try {
+            Mail::send([], [], function ($mail) use ($validated) {
+                $mail->to(config('app.mail_contact_address', 'catalynaarmas@gmail.com'))
+                    ->replyTo($validated['email'], $validated['name'])
+                    ->subject('Nueva consulta de ' . $validated['name'])
+                    ->html(
+                        view('emails.contact', $validated)->render()
+                    );
+            });
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
         // Confirmación automática al cliente. Si falla, no debe afectar el flujo.
         try {
