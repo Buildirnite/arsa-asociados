@@ -32,10 +32,7 @@
                 <div class="value">{{ $email }}</div>
             </div>
             @if($phone)
-            <div class="field">
-                <div class="label">Teléfono</div>
-                <div class="value">{{ $phone }}</div>
-            </div>
+                @include('emails.partials.phone-field', ['phone' => $phone, 'name' => $name])
             @endif
             <div class="field">
                 <div class="label">Consulta</div>
