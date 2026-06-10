@@ -14,7 +14,7 @@
         "headline": {{ json_encode($post->meta_title ?: $post->title) }},
         "description": {{ json_encode($post->meta_description ?: $post->excerpt) }},
         "url": "{{ route('blog.show', $post->slug) }}",
-        "datePublished": "{{ $post->published_at->toIso8601String() }}",
+        "datePublished": "{{ ($post->published_at ?? $post->created_at)->toIso8601String() }}",
         "dateModified": "{{ $post->updated_at->toIso8601String() }}",
         "author": {
             "@@type": "Person",
@@ -50,10 +50,10 @@
                 <h1 class="text-3xl lg:text-4xl font-serif font-semibold text-white leading-tight mb-6">
                     {{ $post->title }}
                 </h1>
-                <div class="flex items-center gap-4 text-xs text-midnight-400">
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-midnight-400">
                     <span>Nicool Armas — Asesora Jurídica</span>
                     <span>·</span>
-                    <span>{{ $post->published_at->format('d \d\e F \d\e Y') }}</span>
+                    <span>{{ ($post->published_at ?? $post->created_at)->format('d \d\e F \d\e Y') }}</span>
                     <span>·</span>
                     <span>Lectura: ~{{ $post->readingTime() }} min</span>
                 </div>

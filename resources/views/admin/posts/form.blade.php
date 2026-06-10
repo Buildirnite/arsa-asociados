@@ -145,15 +145,14 @@
                     <div class="mb-3">
                         <img src="{{ Storage::url($post->image) }}" alt="Imagen actual"
                              class="h-40 w-full object-cover border border-midnight-200">
-                        <div class="flex items-center gap-4 mt-2">
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2">
                             <p class="text-xs text-midnight-400">Imagen actual. Sube una nueva para reemplazarla.</p>
-                            <form method="POST" action="{{ route('admin.posts.destroyImage', $post) }}"
-                                  onsubmit="return confirm('¿Quitar la imagen destacada?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="text-xs text-red-400 hover:text-red-600 transition-colors">
-                                    Quitar imagen
-                                </button>
-                            </form>
+                            {{-- El form real va FUERA del formulario principal (no se pueden anidar
+                                 formularios: rompería el botón "Guardar cambios"). Lo enlazamos con form=. --}}
+                            <button type="submit" form="remove-image-form"
+                                    class="text-xs text-red-400 hover:text-red-600 transition-colors">
+                                Quitar imagen
+                            </button>
                         </div>
                     </div>
                 @endif
@@ -231,7 +230,7 @@
                 <input type="hidden" name="publish_at" id="publish-at" value="{{ $pubInitial }}">
             </div>
 
-            <div class="flex items-center gap-4 pt-2 border-t border-midnight-100">
+            <div class="flex flex-wrap items-center gap-4 pt-2 border-t border-midnight-100">
                 <button type="submit"
                         class="px-8 py-3 bg-midnight-900 text-white text-sm font-semibold hover:bg-midnight-800 transition-colors">
                     {{ $post->exists ? 'Guardar cambios' : 'Crear artículo' }}
@@ -247,6 +246,16 @@
                 </a>
             </div>
         </form>
+
+        @if($post->exists && $post->image)
+            {{-- Formulario auxiliar para quitar la imagen. Debe estar FUERA del
+                 formulario principal; el botón de arriba lo invoca con form="remove-image-form". --}}
+            <form id="remove-image-form" method="POST"
+                  action="{{ route('admin.posts.destroyImage', $post) }}"
+                  onsubmit="return confirm('¿Quitar la imagen destacada?')">
+                @csrf @method('DELETE')
+            </form>
+        @endif
     </main>
 
 <script>
@@ -418,7 +427,10 @@
             pubHidden.value = '';
         } else if (state === 'now') {
             pubSched.classList.add('hidden');
-            pubHidden.value = dtLocal(new Date());
+            // Sentinel: el servidor usa su propia hora exacta (now()).
+            // Así evitamos que el reloj del navegador deje el artículo
+            // como "programado" en el futuro y no se publique.
+            pubHidden.value = 'now';
         } else {
             pubSched.classList.remove('hidden');
             if (!pubPicker.value) { const d = new Date(); d.setDate(d.getDate() + 1); pubPicker.value = dtLocal(d); }
