@@ -27,3 +27,10 @@ Tutorial_Despliegue_Laravel_VPS.pdf
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Playwright (capturas responsive) — artefactos, no el setup
+/tests/e2e/.auth
+/tests/e2e/.output
+/tests/e2e/screenshots
+/test-results
+/playwright-report
