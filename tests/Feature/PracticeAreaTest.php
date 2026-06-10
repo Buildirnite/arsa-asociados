@@ -2,10 +2,14 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PracticeAreaTest extends TestCase
 {
+    // El sitemap consulta Post::published(), así que la tabla posts debe existir.
+    use RefreshDatabase;
+
     public function test_practice_area_page_renders(): void
     {
         $this->get(route('services.show', 'derecho-de-familia'))
