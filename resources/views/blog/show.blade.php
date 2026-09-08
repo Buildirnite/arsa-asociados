@@ -53,7 +53,7 @@
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-midnight-400">
                     <span>Nicool Armas — Asesora Jurídica</span>
                     <span>·</span>
-                    <span>{{ ($post->published_at ?? $post->created_at)->format('d \d\e F \d\e Y') }}</span>
+                    <span>{{ ($post->published_at ?? $post->created_at)->translatedFormat('d \d\e F \d\e Y') }}</span>
                     <span>·</span>
                     <span>Lectura: ~{{ $post->readingTime() }} min</span>
                 </div>

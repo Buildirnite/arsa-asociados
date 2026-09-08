@@ -92,9 +92,9 @@
                             <span class="text-xs text-gold-600">{{ $post->category }}</span>
                             <span class="text-xs text-midnight-400">
                                 @if($post->isPublished())
-                                    Publicado · {{ $post->published_at->format('d M Y') }}
+                                    Publicado · {{ $post->published_at->translatedFormat('d M Y') }}
                                 @elseif($post->isScheduled())
-                                    <span class="text-blue-500">Programado · {{ $post->published_at->format('d M Y H:i') }}</span>
+                                    <span class="text-blue-500">Programado · {{ $post->published_at->translatedFormat('d M Y H:i') }}</span>
                                 @else
                                     Borrador
                                 @endif

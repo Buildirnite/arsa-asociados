@@ -97,7 +97,7 @@
                                 <p class="text-sm text-midnight-500 leading-relaxed flex-1">{{ $post->excerpt }}</p>
                                 <div class="mt-6 flex items-center justify-between">
                                     <div class="flex items-center gap-2 text-xs text-midnight-400">
-                                        <span>{{ $post->published_at->format('d M Y') }}</span>
+                                        <span>{{ $post->published_at->translatedFormat('d M Y') }}</span>
                                         <span>·</span>
                                         <span>~{{ $post->readingTime() }} min</span>
                                     </div>
