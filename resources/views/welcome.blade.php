@@ -46,13 +46,13 @@
         <div class="grid grid-cols-1 lg:grid-cols-2">
 
             {{-- Columna izquierda: fondo crema --}}
-            <div class="relative bg-[#F5F0E8] flex flex-col justify-center px-6 sm:px-8 lg:pl-28 lg:pr-8 xl:pl-40 xl:pr-10 py-24 lg:py-32">
+            <div class="relative bg-[#F5F0E8] flex flex-col justify-center px-6 sm:px-8 lg:pl-28 lg:pr-8 xl:pl-40 xl:pr-10 py-16 lg:py-20 2xl:py-32">
                 <div class="flex items-center gap-3 mb-8 reveal">
                     <div class="h-px w-12 bg-gold-500"></div>
                     <span class="text-xs uppercase tracking-[0.3em] text-gold-700 font-medium">Asesoría Jurídica</span>
                 </div>
 
-                <h1 class="text-4xl sm:text-5xl xl:text-6xl font-serif font-semibold text-midnight-900 leading-[1.1] mb-6 reveal delay-1">
+                <h1 class="text-4xl sm:text-5xl 2xl:text-6xl font-serif font-semibold text-midnight-900 leading-[1.1] mb-6 reveal delay-1">
                     Formación vigente.
                     <span class="text-gold-600">Experiencia real.</span>
                 </h1>
@@ -75,33 +75,17 @@
                 </div>
             </div>
 
-            {{-- Columna derecha: fondo midnight con foto --}}
-            <div class="relative bg-midnight-950 flex items-center justify-center py-20 lg:py-16 min-h-[520px] overflow-hidden">
-                {{-- Patrón de líneas diagonales sutiles --}}
-                <div class="absolute inset-0 pointer-events-none" style="background-image:repeating-linear-gradient(45deg,transparent,transparent 30px,rgba(201,168,76,0.04) 30px,rgba(201,168,76,0.04) 31px);"></div>
+            {{-- Columna derecha: foto de los socios a toda la columna --}}
+            <div class="relative bg-midnight-950 min-h-[420px] lg:min-h-[480px] 2xl:min-h-[600px] overflow-hidden reveal delay-2">
+                <img src="{{ asset('images/team/los3juntos.webp') }}"
+                     alt="{{ collect(\App\Support\TeamMembers::all())->pluck('name')->join(', ', ' y ') }} — socios de Arsa & Asociados"
+                     class="absolute inset-0 w-full h-full object-cover object-top">
 
-                {{-- Figuras geométricas animadas en columna derecha --}}
-                <div class="geo-wrap" aria-hidden="true">
-                    <div style="position:absolute;width:45px;height:45px;top:10%;right:8%;border:1px solid rgba(201,168,76,0.10);animation:geo-f2 28s ease-in-out infinite;"></div>
-                    <div style="position:absolute;width:27px;height:27px;bottom:24%;left:7%;border:1px solid rgba(201,168,76,0.09);animation:geo-f1 25s ease-in-out infinite 3s;"></div>
-                    <div style="position:absolute;width:15px;height:15px;top:52%;right:16%;background:rgba(201,168,76,0.07);animation:geo-f3 30s ease-in-out infinite 5s;"></div>
-                    <div style="position:absolute;width:55px;height:55px;bottom:12%;right:22%;border:1px solid rgba(201,168,76,0.08);animation:geo-f4 35s ease-in-out infinite 2s;"></div>
-                    <div style="position:absolute;width:11px;height:11px;top:28%;left:12%;border:1px solid rgba(201,168,76,0.10);animation:geo-f2 25s ease-in-out infinite 7s;"></div>
-                </div>
-
-                {{-- Foto con badge --}}
-                <div class="relative z-10 w-60 sm:w-72 lg:w-72 xl:w-80 reveal delay-2">
-                    {{-- Foto: el border es el marco, mismo border-radius --}}
-                    <div class="aspect-[4/5] overflow-hidden"
-                         style="border-radius:120px 120px 0 0;border:2px solid rgba(201,168,76,0.55);">
-                        <img src="{{ asset('images/team/abogada.webp') }}" alt="Nicool Armas — Asesora Jurídica"
-                             class="w-full h-full object-cover object-top">
-                    </div>
-                    {{-- Badge nombre --}}
-                    <div class="px-5 py-3" style="background-color:#C9A84C;">
-                        <p class="font-serif font-semibold text-sm leading-tight" style="color:#1a1a2e;">Nicool Armas</p>
-                        <p class="text-xs tracking-wide mt-0.5" style="color:#1a1a2e;opacity:0.72;">Asesora Jurídica — Santiago de Chile</p>
-                    </div>
+                {{-- Franja inferior con el nombre del estudio, superpuesta sobre la foto --}}
+                <div class="absolute inset-x-0 bottom-0 px-6 sm:px-10 py-6"
+                     style="background:linear-gradient(to top, rgba(10,14,26,0.95), rgba(10,14,26,0.55) 65%, transparent);">
+                    <p class="font-serif font-semibold text-lg text-white">Arsa & Asociados</p>
+                    <p class="text-xs tracking-widest uppercase mt-1" style="color:#D8B85C;">Nuestros socios — Santiago de Chile</p>
                 </div>
             </div>
         </div>
@@ -128,7 +112,7 @@
     </section>
 
     {{-- Servicios --}}
-    <section id="servicios" class="py-24 lg:py-32 bg-white relative overflow-hidden">
+    <section id="servicios" class="py-16 lg:py-20 2xl:py-32 bg-white relative overflow-hidden">
         <div class="geo-wrap" aria-hidden="true">
             <div style="position:absolute;width:88px;height:88px;top:5%;right:4%;border:1.5px solid rgba(185,146,63,0.30);animation:geo-f2 26s ease-in-out infinite;"></div>
             <div style="position:absolute;width:56px;height:56px;bottom:8%;left:4%;border:1.5px solid rgba(28,34,51,0.22);animation:geo-f1 21s ease-in-out infinite 4s;"></div>
@@ -176,7 +160,7 @@
     </section>
 
     {{-- Nosotros --}}
-    <section id="nosotros" class="py-24 lg:py-32 bg-midnight-950 relative overflow-hidden">
+    <section id="nosotros" class="py-16 lg:py-20 2xl:py-32 bg-midnight-950 relative overflow-hidden">
         <div class="geo-wrap" aria-hidden="true">
             <div style="position:absolute;width:80px;height:80px;top:8%;right:6%;border:1px solid rgba(185,146,63,0.14);animation:geo-f1 24s ease-in-out infinite;"></div>
             <div style="position:absolute;width:48px;height:48px;bottom:10%;left:5%;border:1px solid rgba(185,146,63,0.09);animation:geo-f2 20s ease-in-out infinite 5s;"></div>
@@ -187,81 +171,79 @@
             <div style="position:absolute;width:40px;height:40px;top:50%;right:38%;background:rgba(185,146,63,0.05);animation:geo-f3 19s ease-in-out infinite 10s;"></div>
         </div>
         <div class="max-w-7xl mx-auto px-6 lg:px-8 relative">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-                {{-- Columna izquierda: texto + cita + valores --}}
-                <div class="reveal reveal-left">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="h-px w-12 bg-gold-500"></div>
-                        <span class="text-xs uppercase tracking-[0.3em] text-gold-400 font-semibold">Sobre nosotros</span>
-                    </div>
-                    <h2 class="text-3xl lg:text-4xl font-serif font-semibold text-white mb-6">
-                        Compromiso con la excelencia jurídica
-                    </h2>
-                    <p class="text-midnight-300 leading-relaxed mb-6">
-                        En <strong class="text-white">Arsa & Asociados</strong> creemos que cada caso merece una atención dedicada y personalizada.
-                        Nuestro trabajo integra rigor técnico actualizado con un profundo sentido ético,
-                        para entregar soluciones jurídicas concretas y efectivas.
+            {{-- Texto institucional + cita + valores --}}
+            <div class="max-w-3xl mb-16 reveal reveal-left">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="h-px w-12 bg-gold-500"></div>
+                    <span class="text-xs uppercase tracking-[0.3em] text-gold-400 font-semibold">Sobre nosotros</span>
+                </div>
+                <h2 class="text-3xl lg:text-4xl font-serif font-semibold text-white mb-6">
+                    Compromiso con la excelencia jurídica
+                </h2>
+                <p class="text-midnight-300 leading-relaxed mb-6">
+                    En <strong class="text-white">Arsa & Asociados</strong> creemos que cada caso merece una atención dedicada y personalizada.
+                    Nuestro trabajo integra rigor técnico actualizado con un profundo sentido ético,
+                    para entregar soluciones jurídicas concretas y efectivas.
+                </p>
+
+                {{-- Cita institucional, con borde dorado izquierdo --}}
+                <blockquote class="border-l-2 border-gold-500 pl-6 py-1 mb-8">
+                    <p class="text-midnight-300 italic font-serif text-base leading-relaxed">
+                        "Formación jurídica de primer nivel — reciente, vigente y profundamente arraigada en la práctica real."
                     </p>
+                    <cite class="block mt-2 text-xs text-gold-400 not-italic font-semibold tracking-wider uppercase">— Arsa & Asociados</cite>
+                </blockquote>
 
-                    {{-- Cita con borde dorado izquierdo --}}
-                    <blockquote class="border-l-2 border-gold-500 pl-6 py-1 mb-8">
-                        <p class="text-midnight-300 italic font-serif text-base leading-relaxed">
-                            "Formación jurídica de primer nivel — reciente, vigente y profundamente arraigada en la práctica real."
-                        </p>
-                        <cite class="block mt-2 text-xs text-gold-400 not-italic font-semibold tracking-wider uppercase">— Nicool Armas, Asesora Jurídica</cite>
-                    </blockquote>
-
-                    {{-- Grid 2×2 de valores --}}
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="flex items-start gap-3 p-4 border border-midnight-800 hover:border-gold-500/40 transition-colors">
-                            <svg class="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
-                            </svg>
-                            <span class="text-sm text-midnight-200 font-medium">Atención personalizada</span>
-                        </div>
-                        <div class="flex items-start gap-3 p-4 border border-midnight-800 hover:border-gold-500/40 transition-colors">
-                            <svg class="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
-                            </svg>
-                            <span class="text-sm text-midnight-200 font-medium">Transparencia total</span>
-                        </div>
-                        <div class="flex items-start gap-3 p-4 border border-midnight-800 hover:border-gold-500/40 transition-colors">
-                            <svg class="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
-                            </svg>
-                            <span class="text-sm text-midnight-200 font-medium">Visión estratégica</span>
-                        </div>
-                        <div class="flex items-start gap-3 p-4 border border-midnight-800 hover:border-gold-500/40 transition-colors">
-                            <svg class="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
-                            </svg>
-                            <span class="text-sm text-midnight-200 font-medium">Resultados concretos</span>
-                        </div>
+                {{-- Grid 2×2 de valores --}}
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="flex items-start gap-3 p-4 border border-midnight-800 hover:border-gold-500/40 transition-colors">
+                        <svg class="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-midnight-200 font-medium">Atención personalizada</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 border border-midnight-800 hover:border-gold-500/40 transition-colors">
+                        <svg class="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-midnight-200 font-medium">Transparencia total</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 border border-midnight-800 hover:border-gold-500/40 transition-colors">
+                        <svg class="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-midnight-200 font-medium">Visión estratégica</span>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 border border-midnight-800 hover:border-gold-500/40 transition-colors">
+                        <svg class="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-midnight-200 font-medium">Resultados concretos</span>
                     </div>
                 </div>
+            </div>
 
-                {{-- Columna derecha: foto con marco y badge --}}
-                <div class="relative reveal reveal-right">
-                    <div class="relative max-w-sm mx-auto lg:mx-0 lg:ml-auto">
-                        {{-- Foto: border dorado directo, marco recto --}}
+            {{-- Socios: foto con marco y badge, uno por columna --}}
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                @foreach(\App\Support\TeamMembers::all() as $member)
+                    <div class="reveal{{ $loop->index ? ' delay-' . $loop->index : '' }}">
                         <div class="aspect-[4/5] overflow-hidden"
                              style="border:2px solid rgba(201,168,76,0.55);">
-                            <img src="{{ asset('images/team/abgd2.webp') }}" alt="Nicool Armas — Asesora Jurídica" class="w-full h-full object-cover object-top">
+                            <img src="{{ asset($member['photo']) }}" alt="{{ $member['name'] }} — {{ $member['role'] }}" class="w-full h-full object-cover object-top">
                         </div>
-                        {{-- Badge con nombre --}}
                         <div class="bg-midnight-900 border-t border-gold-500/40 px-6 py-4">
-                            <p class="text-white font-serif font-semibold">Nicool Armas</p>
-                            <p class="text-gold-400 text-xs tracking-widest uppercase mt-0.5">Asesora Jurídica</p>
+                            <p class="text-white font-serif font-semibold">{{ $member['name'] }}</p>
+                            <p class="text-gold-400 text-xs tracking-widest uppercase mt-0.5">{{ $member['role'] }}</p>
                         </div>
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
 
     {{-- Cómo trabajamos --}}
-    <section class="py-24 lg:py-32 bg-midnight-950 relative overflow-hidden">
+    <section class="py-16 lg:py-20 2xl:py-32 bg-midnight-950 relative overflow-hidden">
         <div class="geo-wrap" aria-hidden="true">
             <div style="position:absolute;width:76px;height:76px;top:10%;left:4%;border:1px solid rgba(185,146,63,0.13);animation:geo-f2 23s ease-in-out infinite;"></div>
             <div style="position:absolute;width:52px;height:52px;bottom:14%;right:6%;border:1px solid rgba(185,146,63,0.09);animation:geo-f1 19s ease-in-out infinite 4s;"></div>
@@ -353,7 +335,7 @@
     </section>
 
     {{-- Testimonios --}}
-    <section id="testimonios" class="py-24 lg:py-32 bg-midnight-50 relative overflow-hidden">
+    <section id="testimonios" class="py-16 lg:py-20 2xl:py-32 bg-midnight-50 relative overflow-hidden">
         <div class="geo-wrap" aria-hidden="true">
             <div style="position:absolute;width:84px;height:84px;top:5%;right:4%;border:1.5px solid rgba(185,146,63,0.30);animation:geo-f1 25s ease-in-out infinite;"></div>
             <div style="position:absolute;width:44px;height:44px;bottom:10%;left:6%;border:1.5px solid rgba(28,34,51,0.22);animation:geo-f2 20s ease-in-out infinite 3s;"></div>
@@ -425,7 +407,7 @@
 
     {{-- Contacto --}}
     {{-- Preguntas frecuentes --}}
-    <section id="faq" class="py-24 lg:py-32 bg-white relative overflow-hidden">
+    <section id="faq" class="py-16 lg:py-20 2xl:py-32 bg-white relative overflow-hidden">
         <div class="max-w-3xl mx-auto px-6 lg:px-8 relative">
             <div class="max-w-2xl mb-12 reveal">
                 <div class="flex items-center gap-3 mb-4">
@@ -452,7 +434,7 @@
         </div>
     </section>
 
-    <section id="contacto" class="py-24 lg:py-32 bg-white relative overflow-hidden">
+    <section id="contacto" class="py-16 lg:py-20 2xl:py-32 bg-white relative overflow-hidden">
         <div class="geo-wrap" aria-hidden="true">
             <div style="position:absolute;width:80px;height:80px;top:8%;right:5%;border:1.5px solid rgba(185,146,63,0.30);animation:geo-f2 24s ease-in-out infinite;"></div>
             <div style="position:absolute;width:56px;height:56px;bottom:12%;left:4%;border:1.5px solid rgba(28,34,51,0.22);animation:geo-f1 20s ease-in-out infinite 4s;"></div>
