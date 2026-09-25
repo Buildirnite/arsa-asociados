@@ -19,14 +19,16 @@ class TeamMembers
                 'role'  => 'Socia — Asesora Jurídica',
             ],
             [
-                'photo' => 'images/team/abogada2.webp',
-                'name'  => 'Selange Bolaños Sepúlveda',
-                'role'  => 'Socia — Abogada',
+                'photo'     => 'images/team/abogada2.webp',
+                'name'      => 'Solange Bolaños Sepúlveda',
+                'role'      => 'Socia — Abogada',
+                'specialty' => 'Diplomado en Derecho Tributario',
             ],
             [
-                'photo' => 'images/team/abogado1.webp',
-                'name'  => 'Fernando Zepeda Pastén',
-                'role'  => 'Socio — Abogado',
+                'photo'     => 'images/team/abogado1.webp',
+                'name'      => 'Fernando Zepeda Pastén',
+                'role'      => 'Socio — Abogado',
+                'specialty' => 'Derecho Laboral',
             ],
         ];
     }

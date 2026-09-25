@@ -235,6 +235,9 @@
                         <div class="bg-midnight-900 border-t border-gold-500/40 px-6 py-4">
                             <p class="text-white font-serif font-semibold">{{ $member['name'] }}</p>
                             <p class="text-gold-400 text-xs tracking-widest uppercase mt-0.5">{{ $member['role'] }}</p>
+                            @if(!empty($member['specialty']))
+                                <p class="text-midnight-400 text-xs mt-1">{{ $member['specialty'] }}</p>
+                            @endif
                         </div>
                     </div>
                 @endforeach
