@@ -76,7 +76,8 @@
             </div>
 
             {{-- Columna derecha: foto de los socios a toda la columna --}}
-            <div class="relative bg-midnight-950 min-h-[420px] lg:min-h-[480px] 2xl:min-h-[600px] overflow-hidden reveal delay-2">
+            {{-- Proporción fija 4:3 para que la foto se diseñe/recorte a una sola medida (1920x1440) y no dependa del alto variable de la columna izquierda --}}
+            <div class="relative bg-midnight-950 aspect-[4/3] self-start overflow-hidden reveal delay-2">
                 {{-- ?v= evita que Cloudflare sirva una versión vieja cacheada cuando se reemplaza el archivo --}}
                 <img src="{{ asset('images/team/ofi1.jpeg') }}?v={{ @filemtime(public_path('images/team/ofi1.jpeg')) }}"
                      alt="La justicia — Arsa & Asociados"
