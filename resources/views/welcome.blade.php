@@ -80,7 +80,7 @@
                 {{-- ?v= evita que Cloudflare sirva una versión vieja cacheada cuando se reemplaza el archivo --}}
                 <img src="{{ asset('images/team/ofi1.jpeg') }}?v={{ @filemtime(public_path('images/team/ofi1.jpeg')) }}"
                      alt="La justicia — Arsa & Asociados"
-                     class="absolute inset-0 w-full h-full object-cover object-top">
+                     class="absolute inset-0 w-full h-full object-contain object-center">
 
                 {{-- Franja inferior con el nombre del estudio, superpuesta sobre la foto --}}
                 <div class="absolute inset-x-0 bottom-0 px-6 sm:px-10 py-6"
