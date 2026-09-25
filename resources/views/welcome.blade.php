@@ -78,8 +78,8 @@
             {{-- Columna derecha: foto de los socios a toda la columna --}}
             <div class="relative bg-midnight-950 min-h-[420px] lg:min-h-[480px] 2xl:min-h-[600px] overflow-hidden reveal delay-2">
                 {{-- ?v= evita que Cloudflare sirva una versión vieja cacheada cuando se reemplaza el archivo --}}
-                <img src="{{ asset('images/team/los3.webp') }}?v={{ @filemtime(public_path('images/team/los3.webp')) }}"
-                     alt="{{ collect(\App\Support\TeamMembers::all())->pluck('name')->join(', ', ' y ') }} — socios de Arsa & Asociados"
+                <img src="{{ asset('images/team/ofi1.jpeg') }}?v={{ @filemtime(public_path('images/team/ofi1.jpeg')) }}"
+                     alt="La justicia — Arsa & Asociados"
                      class="absolute inset-0 w-full h-full object-cover object-top">
 
                 {{-- Franja inferior con el nombre del estudio, superpuesta sobre la foto --}}
