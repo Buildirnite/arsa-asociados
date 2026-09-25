@@ -79,9 +79,9 @@
             {{-- Proporción fija 4:3 para que la foto se diseñe/recorte a una sola medida (1920x1440) y no dependa del alto variable de la columna izquierda --}}
             <div class="relative bg-midnight-950 aspect-[4/3] self-start overflow-hidden reveal delay-2">
                 {{-- ?v= evita que Cloudflare sirva una versión vieja cacheada cuando se reemplaza el archivo --}}
-                <img src="{{ asset('images/team/ofi1.jpeg') }}?v={{ @filemtime(public_path('images/team/ofi1.jpeg')) }}"
-                     alt="La justicia — Arsa & Asociados"
-                     class="absolute inset-0 w-full h-full object-contain object-center">
+                <img src="{{ asset('images/team/equipo-socios.webp') }}?v={{ @filemtime(public_path('images/team/equipo-socios.webp')) }}"
+                     alt="{{ collect(\App\Support\TeamMembers::all())->pluck('name')->join(', ', ' y ') }} — socios de Arsa & Asociados"
+                     class="absolute inset-0 w-full h-full object-cover object-center">
 
                 {{-- Franja inferior con el nombre del estudio, superpuesta sobre la foto --}}
                 <div class="absolute inset-x-0 bottom-0 px-6 sm:px-10 py-6"
