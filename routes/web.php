@@ -7,6 +7,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PracticeAreaController;
+use App\Http\Controllers\ServiceAreaController;
 use App\Http\Middleware\AdminPassword;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,10 @@ Route::get('/sitemap.xml', function () {
 });
 
 Route::get('/servicios/{slug}', [PracticeAreaController::class, 'show'])->name('services.show');
+
+// Ruta fija antes de la paramétrica, mismo criterio que /admin/citas más abajo.
+Route::get('/abogados-region-metropolitana', [ServiceAreaController::class, 'index'])->name('service-areas.index');
+Route::get('/abogados-{slug}', [ServiceAreaController::class, 'show'])->name('service-areas.show');
 
 Route::get('/politica-de-privacidad', fn () => view('legal.privacy'))->name('legal.privacy');
 Route::get('/terminos-de-uso', fn () => view('legal.terms'))->name('legal.terms');

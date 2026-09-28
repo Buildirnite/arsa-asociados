@@ -20,8 +20,8 @@
             @foreach($faqs as $faq)
             {
                 "@@type": "Question",
-                "name": {{ json_encode($faq[0]) }},
-                "acceptedAnswer": { "@@type": "Answer", "text": {{ json_encode($faq[1]) }} }
+                "name": {!! json_encode($faq[0]) !!},
+                "acceptedAnswer": { "@@type": "Answer", "text": {!! json_encode($faq[1]) !!} }
             }@if(!$loop->last),@endif
             @endforeach
         ]
@@ -474,8 +474,11 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="text-sm font-semibold text-midnight-900">Dirección</h4>
-                                <p class="text-sm text-midnight-500 mt-1">Santiago de Chile</p>
+                                <h4 class="text-sm font-semibold text-midnight-900">Zona de atención</h4>
+                                <p class="text-sm text-midnight-500 mt-1">
+                                    Toda la Región Metropolitana, por videollamada.
+                                    <a href="{{ route('service-areas.index') }}" class="text-gold-600 hover:text-gold-700 transition-colors underline underline-offset-2">Ver comunas</a>
+                                </p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">

@@ -7,7 +7,7 @@
     @php
         $metaTitle       = $title ?? 'Arsa & Asociados — Asesoría Jurídica en Santiago de Chile';
         $metaDescription = $description ?? 'Asesoría jurídica integral en derecho civil, laboral y de familia. Atención personalizada y primera consulta sin costo en Santiago de Chile.';
-        $metaUrl         = $canonical ?? url()->current();
+        $metaUrl         = $canonical ?? rtrim(config('app.url'), '/').request()->getPathInfo();
         $ogImage         = $ogImage ?? asset('images/brand/logo-icon.png');
         $ogType          = $ogType ?? 'website';
     @endphp
@@ -35,25 +35,23 @@
     <meta name="twitter:description" content="{{ $metaDescription }}">
     <meta name="twitter:image"       content="{{ $ogImage }}">
 
-    {{-- Structured data: Local Business --}}
+    {{-- Structured data: Local Business. Sin oficina física (atención remota + presencial
+         coordinada): no se declara "address" con calle porque no existe — areaServed es la
+         forma correcta en schema.org de describir un negocio de área de servicio. --}}
     <script type="application/ld+json">
     {
         "@@context": "https://schema.org",
         "@@type": "LegalService",
         "name": "Arsa & Asociados",
-        "description": "Asesoría jurídica especializada en derecho civil, laboral y de familia en Santiago de Chile.",
+        "description": "Asesoría jurídica especializada en derecho civil, laboral y de familia, atendiendo toda la Región Metropolitana de Santiago de Chile.",
         "url": "{{ config('app.url') }}",
         "telephone": "+56930676693",
         "email": "catalynaarmas@gmail.com",
-        "address": {
-            "@@type": "PostalAddress",
-            "addressLocality": "Santiago",
-            "addressCountry": "CL"
-        },
-        "areaServed": {
-            "@@type": "City",
-            "name": "Santiago de Chile"
-        },
+        "areaServed": [
+            @foreach(\App\Support\ServiceAreas::featured() as $area)
+            { "@@type": "City", "name": {!! json_encode($area['name'].', Región Metropolitana, Chile') !!} }@if(!$loop->last),@endif
+            @endforeach
+        ],
         "priceRange": "$$",
         "openingHours": "Mo-Fr 09:00-18:00"
     }
@@ -171,6 +169,7 @@
                         <li><a href="/#nosotros" class="text-sm text-midnight-400 hover:text-white transition-colors">Nosotros</a></li>
                         <li><a href="/#testimonios" class="text-sm text-midnight-400 hover:text-white transition-colors">Testimonios</a></li>
                         <li><a href="{{ route('blog.index') }}" class="text-sm text-midnight-400 hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="{{ route('service-areas.index') }}" class="text-sm text-midnight-400 hover:text-white transition-colors">Zonas de atención</a></li>
                         <li><a href="/#contacto" class="text-sm text-midnight-400 hover:text-white transition-colors">Contacto</a></li>
                     </ul>
                 </div>
@@ -184,7 +183,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
                             </svg>
-                            Santiago de Chile
+                            Atendemos toda la Región Metropolitana
                         </li>
                         <li class="flex items-start gap-2">
                             <svg class="w-4 h-4 mt-0.5 text-gold-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

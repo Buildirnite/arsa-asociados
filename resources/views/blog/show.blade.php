@@ -11,8 +11,8 @@
     {
         "@@context": "https://schema.org",
         "@@type": "BlogPosting",
-        "headline": {{ json_encode($post->meta_title ?: $post->title) }},
-        "description": {{ json_encode($post->meta_description ?: $post->excerpt) }},
+        "headline": {!! json_encode($post->meta_title ?: $post->title) !!},
+        "description": {!! json_encode($post->meta_description ?: $post->excerpt) !!},
         "url": "{{ route('blog.show', $post->slug) }}",
         "datePublished": "{{ ($post->published_at ?? $post->created_at)->toIso8601String() }}",
         "dateModified": "{{ $post->updated_at->toIso8601String() }}",

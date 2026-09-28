@@ -27,6 +27,20 @@
     </url>
     @endforeach
 
+    <url>
+        <loc>{{ route('service-areas.index') }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    @foreach(\App\Support\ServiceAreas::featured() as $area)
+    <url>
+        <loc>{{ route('service-areas.show', $area['slug']) }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    @endforeach
+
     @foreach($posts as $post)
     <url>
         <loc>{{ route('blog.show', $post->slug) }}</loc>
